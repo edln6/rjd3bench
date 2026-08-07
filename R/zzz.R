@@ -1,6 +1,12 @@
 #' @include utils.R
 NULL
 
+#' @importFrom rjd3jars check_java_version
+.onAttach <- function(libname, pkgname) {
+    # Check Java version
+    rjd3jars::check_java_version(silent = FALSE, startup = TRUE)
+}
+
 #' @importFrom rJava .jpackage
 #' @importFrom rjd3jars check_java_version reload_dictionaries
 .onLoad <- function(libname, pkgname) {
@@ -25,12 +31,11 @@ NULL
         lib.loc = libname,
         morePaths = jars_inst
     )
-
     if (!result) {
         stop("Loading Java packages failed")
     }
 
-    # Loading extractors
+    # If java >= 21, then reload dictionnaries
     has_java <- rjd3jars::check_java_version(silent = TRUE)
     if (has_java) {
         rjd3jars::reload_dictionaries()
