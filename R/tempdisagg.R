@@ -387,7 +387,7 @@ temporal_disaggregation_raw <- function(
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
-    vars <- c()
+    vars <- NULL
     if (constant) vars <- "C"
     if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
@@ -845,7 +845,7 @@ temporal_interpolation_raw <- function(
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
-    vars <- c()
+    vars <- NULL
     if (constant) vars <- "C"
     if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
@@ -1291,7 +1291,7 @@ multivariatechowlin <- function(
         result,
         method,
         key,
-        key.class = c("String"),
+        key.class = "String",
         value.class = c("TsData", "Matrix", "DoubleSeq", "List<String>")
     ) {
         key.class <- match.arg(key.class)
