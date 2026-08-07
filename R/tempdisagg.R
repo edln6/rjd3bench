@@ -1070,8 +1070,17 @@ temporaldisaggregationI <- function(
 #'   assumption), and `"userDefined"`, where the matrix is supplied by the user
 #'   via the `var.matrix` argument. For additional details, see the package
 #'   vignette.
+#' @param var.includeCov Boolean. Indicates whether non-diagonal elements of
+#'   the innovation variance-covariance matrix may as well be estimated from
+#'   the residuals of the univariate models. The default is `FALSE`, meaning
+#'   that only a diagonal matrix is estimated.
+#'   This argument is used only when `var = "fromUnivariate"`.
+#' @param var.shrinkCov Boolean. Indicates whether a shrinkage covariance
+#'   estimator should be used. See the vignette for more details.
+#'   This argument is used only when `var = "fromUnivariate"` and
+#'   `var.includeCov = TRUE`.
 #' @param var.matrix The variance-covariance matrix of the innovations.
-#'   This argument is only used when `var = "userDefined"` and must be provided
+#'   This argument is used only when `var = "userDefined"` and must be provided
 #'   in that case.
 #'
 #' @return An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The
@@ -1113,7 +1122,7 @@ temporaldisaggregationI <- function(
 #'
 #' # Estimate models and get results
 #'
-#' ## Mix Chow-Lin - Fernandez
+#' ## Mix Chow-Lin - Fernandez, assuming no covariance in the innovations
 #' rslt1 <- multivariatechowlin(series = lf_series,
 #'                              constant = c(FALSE, FALSE, TRUE),
 #'                              trend = c(FALSE, FALSE, FALSE),
@@ -1123,13 +1132,31 @@ temporaldisaggregationI <- function(
 #'                              freq = 4L,
 #'                              rhos = c(0.85, 1.0, 0.9),
 #'                              var = "fromUnivariate",
+#'                              var.includeCov = FALSE,
+#'                              var.shrinkCov = FALSE,
 #'                              var.matrix = NULL)
 #'
-#' d1 <- do.call(cbind, rslt1$estimation$disagg)
-#' ed1 <- do.call(cbind, rslt1$estimation$edisagg)
+#' do.call(cbind, rslt1$estimation$disagg) # disaggregated series
+#'
+#' ## Mix Chow-Lin - Fernandez, using a shrinkage covariance estimator for the innovations
+#' rslt2 <- multivariatechowlin(series = lf_series,
+#'                              constant = c(FALSE, FALSE, TRUE),
+#'                              trend = c(FALSE, FALSE, FALSE),
+#'                              indicators = indic_series,
+#'                              ccseries = list(z = z),
+#'                              ccdefinition = "z=y1+y2+y3",
+#'                              freq = 4L,
+#'                              rhos = c(0.85, 1.0, 0.9),
+#'                              var = "fromUnivariate",
+#'                              var.includeCov = TRUE,
+#'                              var.shrinkCov = TRUE,
+#'                              var.matrix = NULL)
+#'
+#' rslt2$estimation$vcov # variance-covariance matrix of the innovations
+#' do.call(cbind, rslt2$estimation$disagg)
 #'
 #' ## Fernandez only (Random walk model) with user-defined variance-covariance matrix
-#' rslt2 <- multivariatechowlin(series = lf_series,
+#' rslt3 <- multivariatechowlin(series = lf_series,
 #'                              constant = FALSE,
 #'                              trend = FALSE,
 #'                              indicators = indic_series,
@@ -1138,33 +1165,30 @@ temporaldisaggregationI <- function(
 #'                              freq = 4L,
 #'                              rhos = 1.0,
 #'                              var = "userDefined",
-#'                              var.matrix = diag(c(0.003,0.01,0.001)))
+#'                              var.matrix = matrix(
+#'                                 c(0.005, 0.002, 0.001,
+#'                                   0.002, 0.010, 0.002,
+#'                                   0.001, 0.002, 0.003),
+#'                                 nrow = 3,
+#'                                 byrow = TRUE)
+#'                              )
 #'
-#' d2 <- do.call(cbind, rslt2$estimation$disagg)
-#' ed2 <- do.call(cbind, rslt2$estimation$edisagg)
+#' do.call(cbind, rslt3$estimation$disagg)
 #'
-multivariatechowlin <- function(
-    series,
-    constant = TRUE,
-    trend = FALSE,
-    indicators = NULL,
-    ccseries = NULL,
-    ccdefinition = NULL,
-    freq = 4L,
-    rhos = 1,
-    var = c("fromUnivariate", "allEquals", "userDefined"),
-    var.matrix = NULL
-) {
-    var <- match.arg(var)
+multivariatechowlin <- function(series,
+                                constant = TRUE,
+                                trend = FALSE,
+                                indicators = NULL,
+                                ccseries = NULL,
+                                ccdefinition = NULL,
+                                freq = 4L,
+                                rhos = 1,
+                                var = c("fromUnivariate", "allEquals", "userDefined"),
+                                var.includeCov = FALSE,
+                                var.shrinkCov = FALSE,
+                                var.matrix = NULL) {
 
-    if (!is.null(var.matrix)
-        && (!is.matrix(var.matrix)
-            || any(var.matrix[!diag(nrow(var.matrix), ncol(var.matrix))] != 0))
-    ) {
-        stop(
-            "Only diagonal variance covariance matrix of the innovations is currently supported."
-        )
-    }
+    var <- match.arg(var)
 
     n <- length(series)
     snames <- names(series)
@@ -1273,21 +1297,21 @@ multivariatechowlin <- function(
     jcst <- .jarray(as.logical(constant), contents.class = "Z")
 
     jvar_mat <- rjd3toolkit::.r2jd_matrix(var.matrix)
-    jrslt <- .jcall(
-        obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
-        returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
-        method = "multiChowLin",
-        jdic_series,
-        jcst,
-        jtrend,
-        jarrdic_indic,
-        jdic_ccseries,
-        jccdef,
-        as.integer(freq),
-        jrhos,
-        var,
-        jvar_mat
-    )
+    jrslt <- .jcall(obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
+                    returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
+                    method = "multiChowLin",
+                    jdic_series,
+                    jcst,
+                    jtrend,
+                    jarrdic_indic,
+                    jdic_ccseries,
+                    jccdef,
+                    as.integer(freq),
+                    jrhos,
+                    var,
+                    var.includeCov,
+                    var.shrinkCov,
+                    jvar_mat)
 
     .jd2r_lhmap <- function(
         result,
@@ -1398,7 +1422,7 @@ multivariatechowlin <- function(
 
     estimation <- list(
         disagg = disagg,
-        edisagg = edisagg,
+        # edisagg = edisagg,
         regeffect = regeffect,
         smoothingpart = smoothingpart,
         parameters = rhos,
