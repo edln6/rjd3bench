@@ -1175,19 +1175,20 @@ temporaldisaggregationI <- function(
 #'
 #' do.call(cbind, rslt3$estimation$disagg)
 #'
-multivariatechowlin <- function(series,
-                                constant = TRUE,
-                                trend = FALSE,
-                                indicators = NULL,
-                                ccseries = NULL,
-                                ccdefinition = NULL,
-                                freq = 4L,
-                                rhos = 1,
-                                var = c("fromUnivariate", "allEquals", "userDefined"),
-                                var.includeCov = FALSE,
-                                var.shrinkCov = FALSE,
-                                var.matrix = NULL) {
-
+multivariatechowlin <- function(
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    ccseries = NULL,
+    ccdefinition = NULL,
+    freq = 4L,
+    rhos = 1,
+    var = c("fromUnivariate", "allEquals", "userDefined"),
+    var.includeCov = FALSE,
+    var.shrinkCov = FALSE,
+    var.matrix = NULL
+) {
     var <- match.arg(var)
 
     n <- length(series)
@@ -1297,21 +1298,23 @@ multivariatechowlin <- function(series,
     jcst <- .jarray(as.logical(constant), contents.class = "Z")
 
     jvar_mat <- rjd3toolkit::.r2jd_matrix(var.matrix)
-    jrslt <- .jcall(obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
-                    returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
-                    method = "multiChowLin",
-                    jdic_series,
-                    jcst,
-                    jtrend,
-                    jarrdic_indic,
-                    jdic_ccseries,
-                    jccdef,
-                    as.integer(freq),
-                    jrhos,
-                    var,
-                    var.includeCov,
-                    var.shrinkCov,
-                    jvar_mat)
+    jrslt <- .jcall(
+        obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
+        returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
+        method = "multiChowLin",
+        jdic_series,
+        jcst,
+        jtrend,
+        jarrdic_indic,
+        jdic_ccseries,
+        jccdef,
+        as.integer(freq),
+        jrhos,
+        var,
+        var.includeCov,
+        var.shrinkCov,
+        jvar_mat
+    )
 
     .jd2r_lhmap <- function(
         result,
