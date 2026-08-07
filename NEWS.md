@@ -9,7 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-* Add function multivariatechowlin() for multivariate temporal disaggregation
+* Add function `multivariatechowlin()` for multivariate temporal disaggregation
 
 
 ## [3.1.3] - 2026-07-13
@@ -44,11 +44,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 * Default value of parameters changed in multivariate Cholette
 * Re-ordering of the returned benchmarked series in multivariate Cholette 
-* Change/add parameters in adl_disaggregation() function
+* Change/add parameters in `adl_disaggregation()` function
 
 ### Fixed
 
-* Solve bugs and instability issues in adl_disaggregation()
+* Solve bugs and instability issues in `adl_disaggregation()`
 
 
 ## [3.0.0] - 2025-05-12
@@ -69,14 +69,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 * Solve issue in residual output when tests fail
-* Solve some instability issue in multivariatecholette() 
+* Solve some instability issue in `multivariatecholette()` 
 
 
 ## [2.1.0] - 2024-07-18
 
 ### Added
 
-* Add output on residuals in temporaldisaggregation() function
+* Add output on residuals in `temporaldisaggregation()` function
 
 ### Changed 
 
