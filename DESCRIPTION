@@ -25,7 +25,6 @@ Imports:
   rJava (>= 1.0-6),
   rjd3jars (>= 0.0.5),
   rjd3toolkit (>= 3.8.0),
-  RProtoBuf (>= 0.4.25),
   stats,
   graphics
 Encoding: UTF-8
