@@ -9,41 +9,62 @@ NULL
 #' series by regression models. The implemented models include Chow-Lin,
 #' Fernandez, Litterman and some variants of those algorithms.
 #'
-#' @param series A low-frequency time series to be disaggregated. It must be a `"ts"` object.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high-frequency indicator series used in the temporal disaggregation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a `"ts"` object or a list of `"ts"` objects.
-#' @param model A character string specifying the model of the error term at the disaggregated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freq An integer giving the annual frequency of the disaggregated series.
-#' This argument is ignored when one or more indicator series is provided.
-#' @param average Boolean. Indicates whether an average conversion should be considered. The default is `FALSE`, corresponding to additive conversion.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#' @param series A low-frequency time series to be disaggregated. It must be a
+#'   `"ts"` object.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information, see the package
+#'   vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high-frequency indicator series used in the
+#'   temporal disaggregation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a `"ts"` object or a list of `"ts"` objects.
+#' @param model A character string specifying the model of the error term at
+#'   the disaggregated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and
+#'   `"RwAr1"` (Litterman).
+#' @param freq An integer giving the annual frequency of the disaggregated
+#'   series.
+#'   This argument is ignored when one or more indicator series is provided.
+#' @param average Boolean. Indicates whether an average conversion should be
+#'   considered. The default is `FALSE`, corresponding to additive conversion.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_TEMPDISAGG_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_TEMPDISAGG_RSLTS" is returned. The following
+#' are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation, regression effects, smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation,
+#'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
 #'
 #' @seealso `temporal_interpolation()` for interpolation,
 #'
-#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical frequency series,
+#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical
+#' frequency series,
 #'
 #' `temporal_interpolation_raw()` for interpolation of atypical frequency series
 #'
@@ -201,36 +222,58 @@ temporal_disaggregation <- function(
 #' `temporal_disaggregation_raw()` function extends `temporal_disaggregation()`
 #' by allowing temporal disaggregation for any frequency ratio.
 #'
-#' @param series A low-frequency time series to be disaggregated. It must be a numeric vector.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information on this, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high-frequency indicator series used in the temporal disaggregation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a numeric vector or a matrix.
-#' @param startoffset The number of initial observations in the indicator series that precede the start of the low-frequency series.
-#' The value must be either 0 or a positive integer (default is 0). This argument is ignored when no indicator is provided.
-#' @param model A character string specifying the model of the error term at the disaggregated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freqratio An integer specifying the frequency ratio between the disaggregated series and the low-frequency series.
-#' This argument is mandatory and must be a positive integer.
-#' @param average Boolean. Indicates whether an average conversion should be considered. The default is `FALSE`, corresponding to additive conversion.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#' @param series A low-frequency time series to be disaggregated. It must be a
+#'   numeric vector.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information on this, see the
+#'   package vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high-frequency indicator series used in the
+#'   temporal disaggregation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a numeric vector or a matrix.
+#' @param startoffset The number of initial observations in the indicator
+#'   series that precede the start of the low-frequency series.
+#'   The value must be either 0 or a positive integer (default is 0). This
+#'   argument is ignored when no indicator is provided.
+#' @param model A character string specifying the model of the error term at
+#'   the disaggregated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and
+#'   `"RwAr1"` (Litterman).
+#' @param freqratio An integer specifying the frequency ratio between the
+#'   disaggregated series and the low-frequency series.
+#'   This argument is mandatory and must be a positive integer.
+#' @param average Boolean. Indicates whether an average conversion should be
+#'   considered. The default is `FALSE`, corresponding to additive conversion.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The
+#' following are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` disaggregated values and standard deviation, regression effects, smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` disaggregated values and standard deviation,
+#'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
@@ -399,39 +442,58 @@ temporal_disaggregation_raw <- function(
 #' series by regression models. The implemented models include Chow-Lin,
 #' Fernandez, Litterman and some variants of those algorithms.
 #'
-#' @param series A low-frequency time series to be interpolated. It must be a `"ts"` object.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high-frequency indicator series used in the temporal interpolation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a `"ts"` object or a list of `"ts"` objects.
-#' @param model A character string specifying the model of the error term at the interpolated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freq An integer giving the annual frequency of the interpolated series.
-#' This argument is ignored when one or more indicator series is provided.
+#' @param series A low-frequency time series to be interpolated. It must be a
+#'   `"ts"` object.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information, see the package
+#'   vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high-frequency indicator series used in the
+#'   temporal interpolation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a `"ts"` object or a list of `"ts"` objects.
+#' @param model A character string specifying the model of the error term at
+#'   the interpolated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
+#' @param freq An integer giving the annual frequency of the interpolated
+#'   series.
+#'   This argument is ignored when one or more indicator series is provided.
 #' @param obsposition An integer specifying the position of the low-frequency
 #'   observations within the interpolated series (e.g. the 1st month of the
-#'   year, the 2d month, etc.). The value must be a positive integer or `-1` (the
-#'   default). The default value is equivalent to setting the value of the
-#'   parameter equal to the frequency of the series, meaning that the last value
-#'   of the interpolated series is consistent with the low-frequency series.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#'   year, the 2d month, etc.). The value must be a positive integer or `-1`
+#'   (the default). The default value is equivalent to setting the value of the
+#'   parameter equal to the frequency of the series, meaning that the last
+#'   value of the interpolated series is consistent with the low-frequency
+#'   series.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_INTERP_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_INTERP_RSLTS" is returned. The following are
+#' returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` interpolated Time-Series and standard deviation, regression effects and smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` interpolated Time-Series and standard deviation,
+#'   regression effects and smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
@@ -440,7 +502,8 @@ temporal_disaggregation_raw <- function(
 #'
 #' `temporal_interpolation_raw()` for interpolation of atypical frequency series,
 #'
-#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical frequency series
+#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical
+#' frequency series
 #'
 #'
 #' For more information, see the vignette:
@@ -600,41 +663,62 @@ temporal_interpolation <- function(
 #' `temporal_interpolation_raw()` function extends `temporal_interpolation()` by
 #' allowing temporal interpolation for any frequency ratio.
 #'
-#' @param series A low-frequency time series to be interpolated. It must be a numeric vector.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high frequency indicator series used in the interpolation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a numeric vector or a matrix.
-#' @param startoffset The number of initial observations in the indicator series that precede the start of the low-frequency series.
-#' The value must be either 0 or a positive integer (default is 0). This argument is ignored when no indicator is provided.
-#' @param model A character string specifying the model of the error term at the disaggregated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freqratio An integer specifying the frequency ratio between the interpolated series and the low-frequency series.
-#' This argument is mandatory and must be a positive integer.
+#' @param series A low-frequency time series to be interpolated. It must be a
+#'   numeric vector.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information, see the package
+#'   vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high frequency indicator series used in the
+#'   interpolation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a numeric vector or a matrix.
+#' @param startoffset The number of initial observations in the indicator
+#'   series that precede the start of the low-frequency series.
+#'   The value must be either 0 or a positive integer (default is 0). This
+#'   argument is ignored when no indicator is provided.
+#' @param model A character string specifying the model of the error term at
+#'   the disaggregated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and
+#'   `"RwAr1"` (Litterman).
+#' @param freqratio An integer specifying the frequency ratio between the
+#'   interpolated series and the low-frequency series.
+#'   This argument is mandatory and must be a positive integer.
 #' @param obsposition An integer specifying the position of the low-frequency
 #'   observations within the interpolated series (e.g. the 1st month of the
 #'   year, the 2d month, etc.). The value must be a positive integer or `-1`
 #'   (the default).The default value is equivalent to setting the value of the
 #'   parameter equal to the frequency of the series, meaning that the last value
 #'   of the interpolated series is consistent with the low-frequency series.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_INTERPRAW_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_INTERPRAW_RSLTS" is returned. The following
+#' are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` interpolated values and standard deviation, regression effects, smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` interpolated values and standard deviation,
+#'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
@@ -818,18 +902,28 @@ temporal_interpolation_raw <- function(
 #' indicator as the dependent variable and the unknown target series as the
 #' independent variable.
 #'
-#' @param series A low-frequency time series to be disaggregated or interpolated. It must be a `"ts"` object.
-#' @param indicator A high-frequency indicator series. It must be a `"ts"` object.
-#' @param conversion A character string specifying the conversion mode, typically `"Sum"`(the default) or `"Average"`. Other options are: `"Last"`, `"First"` and `"UserDefined"`.
-#' @param conversion.obsposition An integer specifying the position of the low-frequency observations within the interpolated series (e.g. the 7th month of the year).
-#' This argument is used only for interpolation when `conversion = "UserDefined"`.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
+#' @param series A low-frequency time series to be disaggregated or
+#'   interpolated. It must be a `"ts"` object.
+#' @param indicator A high-frequency indicator series. It must be a `"ts"`
+#'   object.
+#' @param conversion A character string specifying the conversion mode,
+#'   typically `"Sum"`(the default) or `"Average"`. Other options are:
+#'   `"Last"`, `"First"` and `"UserDefined"`.
+#' @param conversion.obsposition An integer specifying the position of the
+#'   low-frequency observations within the interpolated series (e.g. the 7th
+#'   month of the year).
+#'   This argument is used only for interpolation when
+#'   `conversion = "UserDefined"`.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
 #'
-#' @return An object of class "JD3_TEMPDISAGGI_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_TEMPDISAGGI_RSLTS" is returned. The
+#' following are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
 #' * `estimation` `[[2]]` disaggregated Time-Series and parameter;
 #' * `likelihood` `[[3]]` likelihood statistics.
@@ -916,37 +1010,72 @@ temporaldisaggregationI <- function(
 #' time series into higher frequency series, based on the multivariate
 #' extension of the Chow-Lin model or the Random Walk approach (Fernandez).
 #'
-#' @param series A named list of `ts` objects containing the low frequency time series to be disaggregated.
-#' @param constant Either a Boolean or a vector of Booleans. If a vector is provided, each element specifies whether a constant term is included in the model for each series, following the order in which they appear in the `series` object.
-#' The length of the the vector must match the number of series.
-#' If a single Boolean is provided (default if `TRUE`), it is applied to all series.
-#' Note that this argument is used only with Chow-Lin model (i.e., when `rhos` values are strictly less than 1). For further details, see the package vignette.
-#' @param trend Either a Boolean or a vector of Booleans. If a vector is provided, each element specifies whether a linear trend is included in the model for each series, following the order in which they appear in the `series` object.
-#' The length of the the vector must match the number of series.
-#' If a single Boolean is provided (default if `FALSE`), it is applied to all series.
-#' @param indicators a named list of `ts` objects or a named list of a list of `ts` objects. Each element represents one or more high-frequency indicator series associated with each series.
-#' If an element is `NULL`, no indicator is used for the corresponding series. The default value is `NULL`, meaning that no indicators are used for any series.
-#' @param ccseries A named list of `ts` objects containing the contemporaneous constraints. If `NULL` (the default), no contemporaneous constraints can be considered.
-#' @param ccdefinition A character vector defining each contemporaneous constraints. The elements of the vector must be written in the form \eqn{z=w_1 y_1+\ldots+w_n y_n} or \eqn{c=w_1 y_1+\ldots+w_n y_n} where:
-#' * \eqn{z} is the name of a contemporaneous constraint,
-#' * \eqn{(w_1,\ldots,w_n)} are optional numeric weights,
-#' * \eqn{(y_1,\ldots,y_n)} are the names of the time series and
-#' * \eqn{c} is a constant.
-#' The default is `NULL`, meaning that no contemporaneous constraint is considered.
-#' @param freq An integer giving the annual frequency of the disaggregated series.
-#' This argument is ignored when at least one indicator series is provided for any series.
-#' @param rhos Either a numeric value or a vector of numerics. If a vector is provided, each element specifies the value of the `rho` parameter associated to each series, following the order in which they appear in the `series` object.
-#' The length of the the vector must match the number of series.
-#' If a single numeric value is provided (default if `1`, corresponding to the Fernandez model), it is applied to all series.
-#' @param var A character string specifying the method used to estimate the variance-covariance matrix of the innovations.
-#' The default is `"fromUnivariate"`, meaning that is is estimated from the residuals of the univariate models. Others options include `"allEquals"`, which assume a diagonal matrix with identical variances (a strong assumption), and `"userDefined"`, where the matrix is supplied by the user via the `var.matrix` argument. For additional details, see the package vignette.
+#' @param series A named list of `ts` objects containing the low frequency time
+#'   series to be disaggregated.
+#' @param constant Either a Boolean or a vector of Booleans. If a vector is
+#'   provided, each element specifies whether a constant term is included in
+#'   the model for each series, following the order in which they appear in the
+#'   `series` object.
+#'   The length of the the vector must match the number of series.
+#'   If a single Boolean is provided (default if `TRUE`), it is applied to all
+#'   series.
+#'   Note that this argument is used only with Chow-Lin model (i.e., when
+#'   `rhos` values are strictly less than 1). For further details, see the
+#'   package vignette.
+#' @param trend Either a Boolean or a vector of Booleans. If a vector is
+#'   provided, each element specifies whether a linear trend is included in the
+#'   model for each series, following the order in which they appear in the
+#'   `series` object.
+#'   The length of the the vector must match the number of series.
+#'   If a single Boolean is provided (default if `FALSE`), it is applied to all
+#'   series.
+#' @param indicators a named list of `ts` objects or a named list of a list of
+#'   `ts` objects. Each element represents one or more high-frequency indicator
+#'   series associated with each series.
+#'   If an element is `NULL`, no indicator is used for the corresponding
+#'   series. The default value is `NULL`, meaning that no indicators are used
+#'   for any series.
+#' @param ccseries A named list of `ts` objects containing the contemporaneous
+#'   constraints. If `NULL` (the default), no contemporaneous constraints can
+#'   be considered.
+#' @param ccdefinition A character vector defining each contemporaneous
+#'   constraints. The elements of the vector must be written in the form
+#'   \eqn{z=w_1 y_1+\ldots+w_n y_n} or \eqn{c=w_1 y_1+\ldots+w_n y_n} where:
+#'   * \eqn{z} is the name of a contemporaneous constraint,
+#'   * \eqn{(w_1,\ldots,w_n)} are optional numeric weights,
+#'   * \eqn{(y_1,\ldots,y_n)} are the names of the time series and
+#'   * \eqn{c} is a constant.
+#'   The default is `NULL`, meaning that no contemporaneous constraint is
+#'   considered.
+#' @param freq An integer giving the annual frequency of the disaggregated
+#'   series.
+#'   This argument is ignored when at least one indicator series is provided
+#'   for any series.
+#' @param rhos Either a numeric value or a vector of numerics. If a vector is
+#'   provided, each element specifies the value of the `rho` parameter
+#'   associated to each series, following the order in which they appear in the
+#'   `series` object.
+#'   The length of the the vector must match the number of series.
+#'   If a single numeric value is provided (default if `1`, corresponding to
+#'   the Fernandez model), it is applied to all series.
+#' @param var A character string specifying the method used to estimate the
+#'   variance-covariance matrix of the innovations.
+#'   The default is `"fromUnivariate"`, meaning that is is estimated from the
+#'   residuals of the univariate models. Others options include `"allEquals"`,
+#'   which assume a diagonal matrix with identical variances (a strong
+#'   assumption), and `"userDefined"`, where the matrix is supplied by the user
+#'   via the `var.matrix` argument. For additional details, see the package
+#'   vignette.
 #' @param var.matrix The variance-covariance matrix of the innovations.
-#' This argument is only used when `var = "userDefined"` and must be provided in that case.
+#'   This argument is only used when `var = "userDefined"` and must be provided
+#'   in that case.
 #'
-#' @return An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The
+#' following are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients for each series;
-#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation for each series, regression effects, smoothing part, parameter and variance-covariance matrix;
+#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation for
+#'   each series, regression effects, smoothing part, parameter and
+#'   variance-covariance matrix;
 #'
 #' @export
 #'
