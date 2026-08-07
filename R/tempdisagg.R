@@ -392,10 +392,12 @@ temporal_disaggregation_raw <- function(
     if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
         if (is.matrix(indicators)) {
-            for (i in 1:ncol(indicators)) {
+            for (i in seq_len(ncol(indicators))) {
                 vars <- c(vars, paste0("var", i))
             }
-        } else vars <- c(vars, "var1")
+        } else {
+            vars <- c(vars, "var1")
+        }
     }
     coef <- rjd3toolkit::.proc_vector(jrslt, "coeff")
     se <- sqrt(diag(bcov))
@@ -850,10 +852,12 @@ temporal_interpolation_raw <- function(
     if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
         if (is.matrix(indicators)) {
-            for (i in 1:ncol(indicators)) {
+            for (i in seq_len(ncol(indicators))) {
                 vars <- c(vars, paste0("var", i))
             }
-        } else vars <- c(vars, "var1")
+        } else {
+            vars <- c(vars, "var1")
+        }
     }
     coef <- rjd3toolkit::.proc_vector(jrslt, "coeff")
     se <- sqrt(diag(bcov))
@@ -1153,15 +1157,13 @@ multivariatechowlin <- function(
 ) {
     var <- match.arg(var)
 
-    if (!is.null(var.matrix)) {
-        if (
-            !is.matrix(var.matrix) ||
-                any(var.matrix[!diag(nrow(var.matrix), ncol(var.matrix))] != 0)
-        ) {
-            stop(
-                "Only diagonal variance covariance matrix of the innovations is currently supported."
-            )
-        }
+    if (!is.null(var.matrix)
+        && (!is.matrix(var.matrix)
+            || any(var.matrix[!diag(nrow(var.matrix), ncol(var.matrix))] != 0))
+    ) {
+        stop(
+            "Only diagonal variance covariance matrix of the innovations is currently supported."
+        )
     }
 
     n <- length(series)
@@ -1307,7 +1309,9 @@ multivariatechowlin <- function(
             .jcast(jkey, "java/lang/Object")
         )
 
-        if (is.null(jobject)) return(NULL)
+        if (is.null(jobject)) {
+            return(NULL)
+        }
 
         if (value.class == "TsData") {
             out <- rjd3toolkit::.jd2r_tsdata(.jcast(
@@ -1388,12 +1392,15 @@ multivariatechowlin <- function(
         model = model
     )
 
+    smoothingpart <- jrslt |>
+        rjd3toolkit::.jd3_object(subclasses = "MTD", result = TRUE) |>
+        rjd3toolkit::result("smoothingpart")
+
     estimation <- list(
         disagg = disagg,
         edisagg = edisagg,
         regeffect = regeffect,
-        smoothingpart = rjd3toolkit::.jd3_object(jrslt, "MTD", TRUE) |>
-            rjd3toolkit::result("smoothingpart"),
+        smoothingpart = smoothingpart,
         parameters = rhos,
         # residuals -> TODO
         vcov = rjd3toolkit::.proc_matrix(jrslt, "innovationsvarcov")
