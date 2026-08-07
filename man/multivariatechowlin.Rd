@@ -14,6 +14,8 @@ multivariatechowlin(
   freq = 4L,
   rhos = 1,
   var = c("fromUnivariate", "allEquals", "userDefined"),
+  var.includeCov = FALSE,
+  var.shrinkCov = FALSE,
   var.matrix = NULL
 )
 }
@@ -53,8 +55,14 @@ If a single numeric value is provided (default if \code{1}, corresponding to the
 \item{var}{A character string specifying the method used to estimate the variance-covariance matrix of the innovations.
 The default is \code{"fromUnivariate"}, meaning that is is estimated from the residuals of the univariate models. Others options include \code{"allEquals"}, which assume a diagonal matrix with identical variances (a strong assumption), and \code{"userDefined"}, where the matrix is supplied by the user via the \code{var.matrix} argument. For additional details, see the package vignette.}
 
+\item{var.includeCov}{Boolean. Indicates whether non-diagonal elements of the innovation variance-covariance matrix may as well be estimated from the residuals of the univariate models. The default is \code{FALSE}, meaning that only a diagonal matrix is estimated.
+This argument is used only when \code{var = "fromUnivariate"}.}
+
+\item{var.shrinkCov}{Boolean. Indicates whether a shrinkage covariance estimator should be used. See the vignette for more details.
+This argument is used only when \code{var = "fromUnivariate"} and \code{var.includeCov = TRUE}.}
+
 \item{var.matrix}{The variance-covariance matrix of the innovations.
-This argument is only used when \code{var = "userDefined"} and must be provided in that case.}
+This argument is used only when \code{var = "userDefined"} and must be provided in that case.}
 }
 \value{
 An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The following are returned
@@ -94,7 +102,7 @@ rowSums(cbind(Y1,Y2,Y3)) - stats::aggregate.ts(z) # ok!
 
 # Estimate models and get results
 
-## Mix Chow-Lin - Fernandez
+## Mix Chow-Lin - Fernandez, assuming no covariance in the innovations
 rslt1 <- multivariatechowlin(series = lf_series,
                              constant = c(FALSE, FALSE, TRUE),
                              trend = c(FALSE, FALSE, FALSE),
@@ -104,13 +112,31 @@ rslt1 <- multivariatechowlin(series = lf_series,
                              freq = 4L,
                              rhos = c(0.85, 1.0, 0.9),
                              var = "fromUnivariate",
+                             var.includeCov = FALSE,
+                             var.shrinkCov = FALSE,
                              var.matrix = NULL)
 
-d1 <- do.call(cbind, rslt1$estimation$disagg)
-ed1 <- do.call(cbind, rslt1$estimation$edisagg)
+do.call(cbind, rslt1$estimation$disagg) # disaggregated series
+
+## Mix Chow-Lin - Fernandez, using a shrinkage covariance estimator for the innovations
+rslt2 <- multivariatechowlin(series = lf_series,
+                             constant = c(FALSE, FALSE, TRUE),
+                             trend = c(FALSE, FALSE, FALSE),
+                             indicators = indic_series,
+                             ccseries = list(z = z),
+                             ccdefinition = "z=y1+y2+y3",
+                             freq = 4L,
+                             rhos = c(0.85, 1.0, 0.9),
+                             var = "fromUnivariate",
+                             var.includeCov = TRUE,
+                             var.shrinkCov = TRUE,
+                             var.matrix = NULL)
+
+rslt2$estimation$vcov # variance-covariance matrix of the innovations
+do.call(cbind, rslt2$estimation$disagg)
 
 ## Fernandez only (Random walk model) with user-defined variance-covariance matrix
-rslt2 <- multivariatechowlin(series = lf_series,
+rslt3 <- multivariatechowlin(series = lf_series,
                              constant = FALSE,
                              trend = FALSE,
                              indicators = indic_series,
@@ -119,10 +145,15 @@ rslt2 <- multivariatechowlin(series = lf_series,
                              freq = 4L,
                              rhos = 1.0,
                              var = "userDefined",
-                             var.matrix = diag(c(0.003,0.01,0.001)))
+                             var.matrix = matrix(
+                                c(0.005, 0.002, 0.001,
+                                  0.002, 0.010, 0.002,
+                                  0.001, 0.002, 0.003),
+                                nrow = 3,
+                                byrow = TRUE)
+                             )
 
-d2 <- do.call(cbind, rslt2$estimation$disagg)
-ed2 <- do.call(cbind, rslt2$estimation$edisagg)
+do.call(cbind, rslt3$estimation$disagg)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
