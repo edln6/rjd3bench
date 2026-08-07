@@ -23,42 +23,60 @@ temporal_interpolation(
 )
 }
 \arguments{
-\item{series}{A low-frequency time series to be interpolated. It must be a \code{"ts"} object.}
+\item{series}{A low-frequency time series to be interpolated. It must be a
+\code{"ts"} object.}
 
-\item{constant}{Boolean. Indicates whether a constant term is included in the model. The default is \code{TRUE}.
-Note that this argument is used only with \code{model = "Ar1"} when \code{zeroinitialization = FALSE}. For additional information, see the package vignette.}
+\item{constant}{Boolean. Indicates whether a constant term is included in
+the model. The default is \code{TRUE}.
+Note that this argument is used only with \code{model = "Ar1"} when
+\code{zeroinitialization = FALSE}. For additional information, see the package
+vignette.}
 
-\item{trend}{Boolean. Indicates whether a linear trend is included in the model. The default is \code{FALSE}.}
+\item{trend}{Boolean. Indicates whether a linear trend is included in the
+model. The default is \code{FALSE}.}
 
-\item{indicators}{One or more high-frequency indicator series used in the temporal interpolation.
-If \code{NULL} (the default), no indicator is used. When provided, the argument must be a \code{"ts"} object or a list of \code{"ts"} objects.}
+\item{indicators}{One or more high-frequency indicator series used in the
+temporal interpolation.
+If \code{NULL} (the default), no indicator is used. When provided, the argument
+must be a \code{"ts"} object or a list of \code{"ts"} objects.}
 
-\item{model}{A character string specifying the model of the error term at the interpolated level.
+\item{model}{A character string specifying the model of the error term at
+the interpolated level.
 The options are: \code{"Ar1"} (Chow Lin, the default), \code{"Rw"} (Fernandez), and \code{"RwAr1"} (Litterman).}
 
-\item{freq}{An integer giving the annual frequency of the interpolated series.
+\item{freq}{An integer giving the annual frequency of the interpolated
+series.
 This argument is ignored when one or more indicator series is provided.}
 
 \item{obsposition}{An integer specifying the position of the low-frequency
 observations within the interpolated series (e.g. the 1st month of the
-year, the 2d month, etc.). The value must be a positive integer or \code{-1} (the
-default). The default value is equivalent to setting the value of the
-parameter equal to the frequency of the series, meaning that the last value
-of the interpolated series is consistent with the low-frequency series.}
+year, the 2d month, etc.). The value must be a positive integer or \code{-1}
+(the default). The default value is equivalent to setting the value of the
+parameter equal to the frequency of the series, meaning that the last
+value of the interpolated series is consistent with the low-frequency
+series.}
 
-\item{rho}{A numeric value giving the (initial) value of the autoregressive parameter.
+\item{rho}{A numeric value giving the (initial) value of the autoregressive
+parameter.
 This argument is used only for \code{"Ar1"} and \code{"RwAr1"} models.}
 
-\item{rho.fixed}{Boolean. Specifies whether the supplied value of \code{rho} is fixed. The default is \code{FALSE}, which indicates that \code{rho} is estimated.}
+\item{rho.fixed}{Boolean. Specifies whether the supplied value of \code{rho} is
+fixed. The default is \code{FALSE}, which indicates that \code{rho} is estimated.}
 
-\item{rho.truncated}{A numeric value defining the lower bound of the admissible range for \code{rho}.
+\item{rho.truncated}{A numeric value defining the lower bound of the
+admissible range for \code{rho}.
 The evaluation range is \verb{[rho.truncated, 1[}.}
 
-\item{zeroinitialization}{Boolean. If \code{TRUE}, the initial values of the autoregressive model are set to zero. The default is \code{FALSE}.}
+\item{zeroinitialization}{Boolean. If \code{TRUE}, the initial values of the
+autoregressive model are set to zero. The default is \code{FALSE}.}
 
-\item{diffuse.algorithm}{A character string specifying the algorithm used for diffuse initialization. The default is \code{"SqrtDiffuse"}. Other options are: \code{"Diffuse"} and \code{"Augmented"}.}
+\item{diffuse.algorithm}{A character string specifying the algorithm used
+for diffuse initialization. The default is \code{"SqrtDiffuse"}. Other options
+are: \code{"Diffuse"} and \code{"Augmented"}.}
 
-\item{diffuse.regressors}{Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (\code{TRUE}) or as fixed unknown (\code{FALSE}, the default).}
+\item{diffuse.regressors}{Boolean. Indicates whether the coefficients of the
+regression model are treated as diffuse (\code{TRUE}) or as fixed unknown
+(\code{FALSE}, the default).}
 
 \item{nbcsts}{An integer specifying the number of backcast periods.
 This argument is ignored when one or more indicator series is provided.}
@@ -67,11 +85,12 @@ This argument is ignored when one or more indicator series is provided.}
 This argument is ignored when one or more indicator series is provided.}
 }
 \value{
-An object of class "JD3_INTERP_RSLTS" is returned. The following are returned
-invisibly as a list:
+An object of class "JD3_INTERP_RSLTS" is returned. The following are
+returned invisibly as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients;
-\item \code{estimation} \verb{[[2]]} interpolated Time-Series and standard deviation, regression effects and smoothing part, parameter and residuals;
+\item \code{estimation} \verb{[[2]]} interpolated Time-Series and standard deviation,
+regression effects and smoothing part, parameter and residuals;
 \item \code{likelihood} \verb{[[3]]} likelihood statistics.
 }
 }
@@ -105,7 +124,8 @@ ti4$estimation$interp
 
 \code{temporal_interpolation_raw()} for interpolation of atypical frequency series,
 
-\code{temporal_disaggregation_raw()} for temporal disaggregation of atypical frequency series
+\code{temporal_disaggregation_raw()} for temporal disaggregation of atypical
+frequency series
 
 For more information, see the vignette:
 

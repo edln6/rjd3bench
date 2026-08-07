@@ -25,25 +25,37 @@ high-frequency preliminary series. The names must match those provided in
 \code{xlist}. The default is \code{NULL}, indicating that no temporal constraints are
 considered.}
 
-\item{ccvector}{NULL (default) or a character vector defining each contemporaneous constraints. If NULL, no contemporaneous constraint is considered.This is equivalent to applying the univariate Cholette method to each of the preliminary series separately. Otherwise, each element of the vector must be written in the form \eqn{z=w_1 x_1+\ldots+w_n x_n} or \eqn{c=w_1 x_1+\ldots+w_n x_n} where:
+\item{ccvector}{NULL (default) or a character vector defining each
+contemporaneous constraints. If NULL, no contemporaneous constraint is
+considered. This is equivalent to applying the univariate Cholette method
+to each of the preliminary series separately. Otherwise, each element of
+the vector must be written in the form \eqn{z=w_1 x_1+\ldots+w_n x_n} or
+\eqn{c=w_1 x_1+\ldots+w_n x_n} where:
 \itemize{
 \item \eqn{z} is the name of a high-frequency contemporaneous constraint,
 \item \eqn{(w_1,\ldots,w_n)} are optional numeric weights,
-\item \eqn{(x_1,\ldots,x_n)} are the names of the high-frequency preliminary series and
+\item \eqn{(x_1,\ldots,x_n)} are the names of the high-frequency preliminary
+series and
 \item \eqn{c} is a constant.
 }
 
-The \eqn{+} operator can be replaced by \eqn{-}. The names of the contemporaneous constraint(s) and the preliminary series are the one given in the \code{xlist} argument.
+The \eqn{+} operator can be replaced by \eqn{-}. The names of the
+contemporaneous constraint(s) and the preliminary series are the one given
+in the \code{xlist} argument.
 
-\strong{Important}: Any series placed on the left-hand side of a constraint cannot appear on the right-hand side of any other constraint. This is because quantities on the left-hand side are fixed, while those on the right-hand side are adjusted to satisfy the equality.}
+\strong{Important}: Any series placed on the left-hand side of a constraint
+cannot appear on the right-hand side of any other constraint. This is
+because quantities on the left-hand side are fixed, while those on the
+right-hand side are adjusted to satisfy the equality.}
 
 \item{rho}{Numeric. The smoothing parameter whose value must lie between 0
 and 1. The default is \code{0.8}. See the package vignette for more information
 on the choice of the \code{rho} parameter.}
 
 \item{lambda}{Numeric. The adjustment model parameter. Typical values include
-\code{lambda = 0}, \code{lambda = 0.5} (the default) and \code{lambda = 1}. See the package
-vignette for more information on the choice of the \code{lambda} parameter.}
+\code{lambda = 0}, \code{lambda = 0.5} (the default) and \code{lambda = 1}. See the
+package vignette for more information on the choice of the \code{lambda}
+parameter.}
 }
 \value{
 A named list containing the benchmarked series is returned.

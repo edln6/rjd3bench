@@ -18,34 +18,47 @@ adl_disaggregation(
 )
 }
 \arguments{
-\item{series}{A low-frequency time series to be disaggregated. It must be \code{"ts"} object.}
+\item{series}{A low-frequency time series to be disaggregated. It must be
+\code{"ts"} object.}
 
-\item{constant}{Boolean. Indicates whether a constant term is included in the model. The default is \code{TRUE}.}
+\item{constant}{Boolean. Indicates whether a constant term is included in
+the model. The default is \code{TRUE}.}
 
-\item{trend}{Boolean. Indicates whether a linear trend is included in the model. The default is \code{FALSE}.}
+\item{trend}{Boolean. Indicates whether a linear trend is included in the
+model. The default is \code{FALSE}.}
 
-\item{indicators}{One or more high-frequency indicator series. If not NULL (the default), this must be a \code{"ts"} object or a list of \code{"ts"} objects.}
+\item{indicators}{One or more high-frequency indicator series. If not NULL
+(the default), this must be a \code{"ts"} object or a list of \code{"ts"} objects.}
 
-\item{average}{Boolean. Indicates whether an average conversion should be considered. The default is \code{FALSE}, corresponding to additive conversion.}
+\item{average}{Boolean. Indicates whether an average conversion should be
+considered. The default is \code{FALSE}, corresponding to additive conversion.}
 
 \item{phi}{A numeric value giving the (initial) value of the phi parameter}
 
-\item{phi.fixed}{Boolean. Specifies whether the supplied value of \code{phi} is fixed. The default is \code{FALSE}, which indicates that \code{phi} is estimated.}
+\item{phi.fixed}{Boolean. Specifies whether the supplied value of \code{phi} is
+fixed. The default is \code{FALSE}, which indicates that \code{phi} is estimated.}
 
-\item{phi.truncated}{A numeric value defining the lower bound of the admissible range for \code{phi}.
+\item{phi.truncated}{A numeric value defining the lower bound of the
+admissible range for \code{phi}.
 The evaluation range is \verb{[phi.truncated, 1[}.}
 
-\item{xar}{A character string specifying the constraints imposed on the coefficients of the lagged regression variables. The default is \code{"FREE"}, which indicates that no constraints are applied. Other options are: \code{"SAME"}and \code{"NONE"}.
+\item{xar}{A character string specifying the constraints imposed on the
+coefficients of the lagged regression variables. The default is \code{"FREE"},
+which indicates that no constraints are applied.
+Other options are: \code{"SAME"}and \code{"NONE"}.
 For additional information, see the package vignette.}
 
-\item{diffuse}{Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (\code{TRUE}) or as fixed unknown (\code{FALSE}, the default).}
+\item{diffuse}{Boolean. Indicates whether the coefficients of the regression
+model are treated as diffuse (\code{TRUE}) or as fixed unknown (\code{FALSE}, the
+default).}
 }
 \value{
-An object of class "JD3_ADLDISAGG_RSLTS" is returned. The following are returned
-invisibly as a list:
+An object of class "JD3_ADLDISAGG_RSLTS" is returned. The following
+are returned invisibly as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients;
-\item \code{estimation} \verb{[[2]]} disaggregated Time-Series and standard deviation, parameter and residuals;
+\item \code{estimation} \verb{[[2]]} disaggregated Time-Series and standard deviation,
+parameter and residuals;
 \item \code{likelihood} \verb{[[3]]} likelihood statistics.
 }
 }
@@ -70,7 +83,9 @@ td4 <- adl_disaggregation(Y, indicators = x, xar = "NONE") # ~ Santos Silva-Card
 \dontshow{\}) # examplesIf}
 }
 \references{
-Proietti, P. (2005). Temporal Disaggregation by State Space Methods: Dynamic Regression Methods Revisited. Working papers and Studies, European Commission, ISSN 1725-4825.
+Proietti, P. (2005). Temporal Disaggregation by State Space
+Methods: Dynamic Regression Methods Revisited. Working papers and Studies,
+European Commission, ISSN 1725-4825.
 }
 \seealso{
 For more information, see the vignette:

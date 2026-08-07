@@ -1,5 +1,4 @@
 #' @importFrom rJava .jpackage .jcall .jnull .jarray .jevalArray .jcast .jcastToArray .jinstanceof is.jnull .jnew .jclass
-#' @import RProtoBuf
 NULL
 
 #' @title Quarterly National Accounts data for temporal disaggregation

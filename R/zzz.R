@@ -35,8 +35,4 @@ NULL
     if (has_java) {
         rjd3jars::reload_dictionaries()
     }
-
-    # Loading Proto class
-    #  proto.dir <- system.file("proto", package = pkgname)
-    #  RProtoBuf::readProtoFiles2(protoPath = proto.dir)
 }
