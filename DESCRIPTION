@@ -38,6 +38,7 @@ Collate:
     'deprecated.R'
     'mbdenton.R'
     'print.R'
+    'rjd3bench-package.R'
     'tempdisagg.R'
     'zzz.R'
 LazyData: TRUE
