@@ -27,7 +27,7 @@ NULL
     )
 
     if (!result) {
-        stop("Loading java packages failed")
+        stop("Loading Java packages failed")
     }
 
     # Loading extractors

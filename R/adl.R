@@ -49,17 +49,18 @@ NULL
 #'                           xar = "SAME", phi = 1, phi.fixed = TRUE) # ~ Fernandez
 #' td4 <- adl_disaggregation(Y, indicators = x, xar = "NONE") # ~ Santos Silva-Cardoso
 #'
-adl_disaggregation <- function(series,
-                               constant = TRUE,
-                               trend = FALSE,
-                               indicators = NULL,
-                               average = FALSE,
-                               phi = 0.0,
-                               phi.fixed = FALSE,
-                               phi.truncated = 0.0,
-                               xar = c("FREE", "SAME", "NONE"),
-                               diffuse = FALSE) {
-
+adl_disaggregation <- function(
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    average = FALSE,
+    phi = 0.0,
+    phi.fixed = FALSE,
+    phi.truncated = 0.0,
+    xar = c("FREE", "SAME", "NONE"),
+    diffuse = FALSE
+) {
     xar <- match.arg(xar)
     conversion <- ifelse(average, "Average", "Sum")
 
@@ -76,14 +77,30 @@ adl_disaggregation <- function(series,
         } else {
             stop("Invalid indicators")
         }
-        jindicators <- .jarray(jlist, contents.class = "jdplus/toolkit/base/api/timeseries/TsData")
+        jindicators <- .jarray(
+            jlist,
+            contents.class = "jdplus/toolkit/base/api/timeseries/TsData"
+        )
     } else {
         jindicators <- .jnull("[Ljdplus/toolkit/base/api/timeseries/TsData;")
     }
 
-    jrslt <- .jcall("jdplus/benchmarking/base/r/TemporalDisaggregation", "Ljdplus/benchmarking/base/core/univariate/ADLResults;",
-                    "processADL", jseries, constant, trend, jindicators, conversion,
-                    phi, phi.fixed, phi.truncated, xar, "TRANSITION", diffuse)
+    jrslt <- .jcall(
+        "jdplus/benchmarking/base/r/TemporalDisaggregation",
+        "Ljdplus/benchmarking/base/core/univariate/ADLResults;",
+        "processADL",
+        jseries,
+        constant,
+        trend,
+        jindicators,
+        conversion,
+        phi,
+        phi.fixed,
+        phi.truncated,
+        xar,
+        "TRANSITION",
+        diffuse
+    )
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
@@ -117,4 +134,3 @@ adl_disaggregation <- function(series,
     class(output) <- "JD3_ADLDISAGG_RSLTS"
     return(output)
 }
-

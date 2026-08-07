@@ -69,14 +69,14 @@ NULL
 #'                  legend = c("td1", "td2"))
 #'
 denton_modelbased <- function(
-        series,
-        indicator,
-        differencing = 1L,
-        conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
-        conversion.obsposition = 1L,
-        outliers = NULL,
-        fixedBIratios = NULL) {
-
+    series,
+    indicator,
+    differencing = 1L,
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    conversion.obsposition = 1L,
+    outliers = NULL,
+    fixedBIratios = NULL
+) {
     conversion <- match.arg(conversion)
 
     jseries <- rjd3toolkit::.r2jd_tsdata(series)
@@ -95,9 +95,20 @@ denton_modelbased <- function(
         fdates <- .jarray(names(fixedBIratios))
         fvars <- .jarray(as.numeric(fixedBIratios))
     }
-    jrslt <- .jcall("jdplus/benchmarking/base/r/TemporalDisaggregation", "Ljdplus/benchmarking/base/core/univariate/ModelBasedDentonResults;",
-                    "processModelBasedDenton", jseries, jindicator, 1L, conversion, as.integer(conversion.obsposition), odates, ovars,
-                    fdates, fvars)
+    jrslt <- .jcall(
+        "jdplus/benchmarking/base/r/TemporalDisaggregation",
+        "Ljdplus/benchmarking/base/core/univariate/ModelBasedDentonResults;",
+        "processModelBasedDenton",
+        jseries,
+        jindicator,
+        1L,
+        conversion,
+        as.integer(conversion.obsposition),
+        odates,
+        ovars,
+        fdates,
+        fvars
+    )
     # Build the S3 result
     estimation <- list(
         disagg = rjd3toolkit::.proc_ts(jrslt, "disagg"),
@@ -115,6 +126,3 @@ denton_modelbased <- function(
 
     return(output)
 }
-
-
-

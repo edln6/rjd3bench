@@ -76,31 +76,31 @@ NULL
 #' td3$estimation$disagg
 #'
 temporal_disaggregation <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freq = 4L,
-        average = FALSE,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
-	model <- match.arg(model)
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freq = 4L,
+    average = FALSE,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
+    model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
     if (model != "Ar1" && !zeroinitialization) {
         constant <- FALSE
     }
 
     jseries <- rjd3toolkit::.r2jd_tsdata(series)
-	if (!is.null(indicators)) {
-	    jlist <- list()
+    if (!is.null(indicators)) {
+        jlist <- list()
         if (is.list(indicators)) {
             for (i in seq_along(indicators)) {
                 jlist[[i]] <- rjd3toolkit::.r2jd_tsdata(indicators[[i]])
@@ -110,26 +110,49 @@ temporal_disaggregation <- function(
         } else {
             stop("Invalid indicators")
         }
-        jindicators <- .jarray(jlist, contents.class = "jdplus/toolkit/base/api/timeseries/TsData")
+        jindicators <- .jarray(
+            jlist,
+            contents.class = "jdplus/toolkit/base/api/timeseries/TsData"
+        )
 
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processDisaggregation",
-            jseries, constant, trend, jindicators, model, average, rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            jseries,
+            constant,
+            trend,
+            jindicators,
+            model,
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
     } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processDisaggregation",
-            jseries, constant, trend, model, as.integer(freq), average, rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            jseries,
+            constant,
+            trend,
+            model,
+            as.integer(freq),
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
-
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
@@ -244,26 +267,26 @@ temporal_disaggregation <- function(
 #' td3$estimation$disagg
 #'
 temporal_disaggregation_raw <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        startoffset = 0L,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freqratio,
-        average = FALSE,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    startoffset = 0L,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freqratio,
+    average = FALSE,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
-    if(!is.vector(series, mode = "numeric")){
+    if (!is.vector(series, mode = "numeric")) {
         stop("The input series must be a numeric vector")
     }
     if (model != "Ar1" && !zeroinitialization) {
@@ -275,46 +298,67 @@ temporal_disaggregation_raw <- function(
             jindicators <- rjd3toolkit::.r2jd_matrix(indicators)
         } else if (is.vector(indicators, mode = "numeric")) {
             jindicators <- rjd3toolkit::.r2jd_matrix(as.matrix(indicators))
-        } else{
+        } else {
             stop("Indicators must be either a numeric vector or a matrix")
         }
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawDisaggregation",
-            as.numeric(series), constant, trend, jindicators, as.integer(startoffset), model,
-            as.integer(freqratio), average, rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            as.numeric(series),
+            constant,
+            trend,
+            jindicators,
+            as.integer(startoffset),
+            model,
+            as.integer(freqratio),
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
-    } else{
+    } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawDisaggregation",
-            as.numeric(series), constant, trend, model, as.integer(freqratio), average,
-            rho, rho.fixed, rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            as.numeric(series),
+            constant,
+            trend,
+            model,
+            as.integer(freqratio),
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
     vars <- c()
-    if(constant) vars <- "C"
-    if(trend) vars <- c(vars, "Trend")
+    if (constant) vars <- "C"
+    if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
         if (is.matrix(indicators)) {
             for (i in 1:ncol(indicators)) {
                 vars <- c(vars, paste0("var", i))
             }
-        }
-        else vars <- c(vars, "var1")
+        } else vars <- c(vars, "var1")
     }
     coef <- rjd3toolkit::.proc_vector(jrslt, "coeff")
     se <- sqrt(diag(bcov))
-    t <- coef/se
+    t <- coef / se
     m <- data.frame(coef, se, t)
-    if(nrow(m) > 0) row.names(m) <- vars
+    if (nrow(m) > 0) row.names(m) <- vars
 
     regression <- list(
         type = model,
@@ -327,7 +371,11 @@ temporal_disaggregation_raw <- function(
         disagg = rjd3toolkit::.proc_vector(jrslt, "disagg"),
         edisagg = rjd3toolkit::.proc_vector(jrslt, "edisagg"),
         regeffect = rjd3toolkit::.proc_vector(jrslt, "regeffect"),
-        smoothingpart = ifelse(!is.null(vars), rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"), NaN),
+        smoothingpart = ifelse(
+            !is.null(vars),
+            rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"),
+            NaN
+        ),
         parameter = rjd3toolkit::.proc_numeric(jrslt, "parameter"),
         eparameter = rjd3toolkit::.proc_numeric(jrslt, "eparameter"),
         residuals = .proc_residuals(jrslt, freqratio)
@@ -420,30 +468,30 @@ temporal_disaggregation_raw <- function(
 #' ti4$estimation$interp
 #'
 temporal_interpolation <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freq = 4L,
-        obsposition = -1L,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freq = 4L,
+    obsposition = -1L,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
     if (model != "Ar1" && !zeroinitialization) {
         constant <- FALSE
     }
-    if(obsposition > 0){
+    if (obsposition > 0) {
         obsposition <- obsposition - 1L
-    }else if (obsposition != -1){
+    } else if (obsposition != -1) {
         stop("obsposition must be set to -1 (default) or a positive integer")
     }
 
@@ -459,26 +507,49 @@ temporal_interpolation <- function(
         } else {
             stop("Invalid indicators")
         }
-        jindicators <- .jarray(jlist, contents.class = "jdplus/toolkit/base/api/timeseries/TsData")
+        jindicators <- .jarray(
+            jlist,
+            contents.class = "jdplus/toolkit/base/api/timeseries/TsData"
+        )
 
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processInterpolation",
-            jseries, constant, trend, jindicators, model, as.integer(obsposition), rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            jseries,
+            constant,
+            trend,
+            jindicators,
+            model,
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
     } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processInterpolation",
-            jseries, constant, trend, model, as.integer(freq), as.integer(obsposition), rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            jseries,
+            constant,
+            trend,
+            model,
+            as.integer(freq),
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
-
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
@@ -608,34 +679,34 @@ temporal_interpolation <- function(
 #' ti4$estimation$interp
 #'
 temporal_interpolation_raw <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        startoffset = 0L,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freqratio,
-        obsposition = -1L,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    startoffset = 0L,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freqratio,
+    obsposition = -1L,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
-    if(!is.vector(series, mode = "numeric")){
+    if (!is.vector(series, mode = "numeric")) {
         stop("The input series must be a numeric vector")
     }
     if (model != "Ar1" && !zeroinitialization) {
         constant <- FALSE
     }
-    if(obsposition > 0){
+    if (obsposition > 0) {
         obsposition <- obsposition - 1L
-    }else if (obsposition != -1){
+    } else if (obsposition != -1) {
         stop("obsposition must be set to -1 (default) or a positive integer")
     }
 
@@ -644,46 +715,67 @@ temporal_interpolation_raw <- function(
             jindicators <- rjd3toolkit::.r2jd_matrix(indicators)
         } else if (is.vector(indicators, mode = "numeric")) {
             jindicators <- rjd3toolkit::.r2jd_matrix(as.matrix(indicators))
-        } else{
+        } else {
             stop("Indicators must be either a numeric vector or a matrix")
         }
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawInterpolation",
-            as.numeric(series), constant, trend, jindicators, as.integer(startoffset), model,
-            as.integer(freqratio), as.integer(obsposition), rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            as.numeric(series),
+            constant,
+            trend,
+            jindicators,
+            as.integer(startoffset),
+            model,
+            as.integer(freqratio),
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
-    } else{
+    } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawInterpolation",
-            as.numeric(series), constant, trend, model, as.integer(freqratio), as.integer(obsposition),
-            rho, rho.fixed, rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            as.numeric(series),
+            constant,
+            trend,
+            model,
+            as.integer(freqratio),
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
     vars <- c()
-    if(constant) vars <- "C"
-    if(trend) vars <- c(vars, "Trend")
+    if (constant) vars <- "C"
+    if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
         if (is.matrix(indicators)) {
             for (i in 1:ncol(indicators)) {
                 vars <- c(vars, paste0("var", i))
             }
-        }
-        else vars <- c(vars, "var1")
+        } else vars <- c(vars, "var1")
     }
     coef <- rjd3toolkit::.proc_vector(jrslt, "coeff")
     se <- sqrt(diag(bcov))
-    t <- coef/se
+    t <- coef / se
     m <- data.frame(coef, se, t)
-    if(nrow(m) > 0) row.names(m) <- vars
+    if (nrow(m) > 0) row.names(m) <- vars
 
     regression <- list(
         type = model,
@@ -696,7 +788,11 @@ temporal_interpolation_raw <- function(
         interp = rjd3toolkit::.proc_vector(jrslt, "disagg"),
         einterp = rjd3toolkit::.proc_vector(jrslt, "edisagg"),
         regeffect = rjd3toolkit::.proc_vector(jrslt, "regeffect"),
-        smoothingpart = ifelse(!is.null(vars), rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"), NaN),
+        smoothingpart = ifelse(
+            !is.null(vars),
+            rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"),
+            NaN
+        ),
         parameter = rjd3toolkit::.proc_numeric(jrslt, "parameter"),
         eparameter = rjd3toolkit::.proc_numeric(jrslt, "eparameter"),
         residuals = .proc_residuals(jrslt, freqratio)
@@ -762,15 +858,32 @@ temporal_interpolation_raw <- function(
 #' td$regression$a
 #' td$regression$b
 #'
-temporaldisaggregationI <- function(series, indicator,
-                                    conversion = c("Sum", "Average", "Last", "First", "UserDefined"), conversion.obsposition = 1L,
-                                    rho = 0., rho.fixed = FALSE,  rho.truncated = 0.) {
+temporaldisaggregationI <- function(
+    series,
+    indicator,
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    conversion.obsposition = 1L,
+    rho = 0.,
+    rho.fixed = FALSE,
+    rho.truncated = 0.
+) {
     conversion <- match.arg(conversion)
     jseries <- rjd3toolkit::.r2jd_tsdata(series)
     jlist <- list()
     jindicator <- rjd3toolkit::.r2jd_tsdata(indicator)
-    jrslt <- .jcall("jdplus/benchmarking/base/r/TemporalDisaggregation", "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationIResults;",
-                    "processI", jseries, jindicator, "Ar1", conversion, as.integer(conversion.obsposition), rho, rho.fixed, rho.truncated)
+    jrslt <- .jcall(
+        "jdplus/benchmarking/base/r/TemporalDisaggregation",
+        "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationIResults;",
+        "processI",
+        jseries,
+        jindicator,
+        "Ar1",
+        conversion,
+        as.integer(conversion.obsposition),
+        rho,
+        rho.fixed,
+        rho.truncated
+    )
     # Build the S3 result
     a <- rjd3toolkit::.proc_numeric(jrslt, "a")
     b <- rjd3toolkit::.proc_numeric(jrslt, "b")
@@ -794,8 +907,6 @@ temporaldisaggregationI <- function(series, indicator,
     class(output) <- "JD3_TEMPDISAGGI_RSLTS"
     return(output)
 }
-
-
 
 
 #' @title Multivariate Temporal Disaggregaton of a System of Time Series by Regression Models.
@@ -899,22 +1010,28 @@ temporaldisaggregationI <- function(series, indicator,
 #' d2 <- do.call(cbind, rslt2$estimation$disagg)
 #' ed2 <- do.call(cbind, rslt2$estimation$edisagg)
 #'
-multivariatechowlin <- function(series,
-                                constant = TRUE,
-                                trend = FALSE,
-                                indicators = NULL,
-                                ccseries = NULL,
-                                ccdefinition = NULL,
-                                freq = 4L,
-                                rhos = 1,
-                                var = c("fromUnivariate", "allEquals", "userDefined"),
-                                var.matrix = NULL) {
-
+multivariatechowlin <- function(
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    ccseries = NULL,
+    ccdefinition = NULL,
+    freq = 4L,
+    rhos = 1,
+    var = c("fromUnivariate", "allEquals", "userDefined"),
+    var.matrix = NULL
+) {
     var <- match.arg(var)
 
-    if(!is.null(var.matrix)) {
-        if (!is.matrix(var.matrix) || any(var.matrix[!diag(nrow(var.matrix), ncol(var.matrix))] != 0)) {
-            stop("Only diagonal variance covariance matrix of the innovations is currently supported.")
+    if (!is.null(var.matrix)) {
+        if (
+            !is.matrix(var.matrix) ||
+                any(var.matrix[!diag(nrow(var.matrix), ncol(var.matrix))] != 0)
+        ) {
+            stop(
+                "Only diagonal variance covariance matrix of the innovations is currently supported."
+            )
         }
     }
 
@@ -924,15 +1041,21 @@ multivariatechowlin <- function(series,
     same_size <- length(indicators) == n
     same_names <- setequal(snames, names(indicators))
     if (!are_lists || !same_size || !same_names) {
-        stop("The 'series' and 'indicators' arguments must be lists with matching size and names.")
+        stop(
+            "The 'series' and 'indicators' arguments must be lists with matching size and names."
+        )
     }
 
     # create the input
     jdic_series <- .jnew("jdplus/toolkit/base/r/util/Dictionary")
-    for (i in seq_along(series)){
-        .jcall(jdic_series, "V", "add",
-               snames[i],
-               rjd3toolkit::.r2jd_tsdata(series[[i]]))
+    for (i in seq_along(series)) {
+        .jcall(
+            jdic_series,
+            "V",
+            "add",
+            snames[i],
+            rjd3toolkit::.r2jd_tsdata(series[[i]])
+        )
     }
 
     ncst <- length(constant)
@@ -952,31 +1075,44 @@ multivariatechowlin <- function(series,
     jtrend <- .jarray(as.logical(trend), contents.class = "Z")
 
     jarrdic_indic <- .jnew("jdplus/benchmarking/base/r/util/DictionaryGroups")
-    for (i in seq_along(indicators)){
-        if(!is.list(indicators[[i]])) indicators[[i]] <- list(x = indicators[[i]])
+    for (i in seq_along(indicators)) {
+        if (!is.list(indicators[[i]]))
+            indicators[[i]] <- list(x = indicators[[i]])
 
-        for(j in seq_along(indicators[[i]])){
+        for (j in seq_along(indicators[[i]])) {
             indic <- indicators[[i]][[j]]
 
             if (stats::is.ts(indic)) {
-                .jcall(jarrdic_indic, "V", "add",
-                       names(indicators)[i],
-                       rjd3toolkit::.r2jd_tsdata(indic))
+                .jcall(
+                    jarrdic_indic,
+                    "V",
+                    "add",
+                    names(indicators)[i],
+                    rjd3toolkit::.r2jd_tsdata(indic)
+                )
             } else if (is.null(indic)) {
-                .jcall(jarrdic_indic, "V", "add",
-                       names(indicators)[i],
-                       .jnull("jdplus/toolkit/base/api/timeseries/TsData"))
+                .jcall(
+                    jarrdic_indic,
+                    "V",
+                    "add",
+                    names(indicators)[i],
+                    .jnull("jdplus/toolkit/base/api/timeseries/TsData")
+                )
             }
         }
     }
 
     if (!is.null(ccseries)) {
-        if(!is.list(ccseries)) stop("'ccseries' must be a list.")
+        if (!is.list(ccseries)) stop("'ccseries' must be a list.")
         jdic_ccseries <- .jnew("jdplus/toolkit/base/r/util/Dictionary")
         for (i in seq_along(ccseries)) {
-            .jcall(jdic_ccseries, "V", "add",
-                   names(ccseries)[i],
-                   rjd3toolkit::.r2jd_tsdata(ccseries[[i]]))
+            .jcall(
+                jdic_ccseries,
+                "V",
+                "add",
+                names(ccseries)[i],
+                rjd3toolkit::.r2jd_tsdata(ccseries[[i]])
+            )
         }
     } else {
         jdic_ccseries <- .jnull("jdplus/toolkit/base/r/util/Dictionary")
@@ -985,7 +1121,10 @@ multivariatechowlin <- function(series,
     if (is.null(ccdefinition)) {
         jccdef <- .jnull("[Ljava/lang/String;")
     } else if (is.character(ccdefinition)) {
-        jccdef <- .jarray(as.character(ccdefinition), contents.class = "java/lang/String")
+        jccdef <- .jarray(
+            as.character(ccdefinition),
+            contents.class = "java/lang/String"
+        )
     } else {
         stop("'ccdefinition' must be NULL or a character vector.")
     }
@@ -1003,33 +1142,49 @@ multivariatechowlin <- function(series,
     jcst <- .jarray(as.logical(constant), contents.class = "Z")
 
     jvar_mat <- rjd3toolkit::.r2jd_matrix(var.matrix)
-    jrslt <- .jcall(obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
-                    returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
-                    method = "multiChowLin",
-                    jdic_series,
-                    jcst,
-                    jtrend,
-                    jarrdic_indic,
-                    jdic_ccseries,
-                    jccdef,
-                    as.integer(freq),
-                    jrhos,
-                    var,
-                    jvar_mat)
+    jrslt <- .jcall(
+        obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
+        returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
+        method = "multiChowLin",
+        jdic_series,
+        jcst,
+        jtrend,
+        jarrdic_indic,
+        jdic_ccseries,
+        jccdef,
+        as.integer(freq),
+        jrhos,
+        var,
+        jvar_mat
+    )
 
-    .jd2r_lhmap <- function(result, method, key, key.class = c("String"), value.class = c("TsData", "Matrix", "DoubleSeq", "List<String>")) {
+    .jd2r_lhmap <- function(
+        result,
+        method,
+        key,
+        key.class = c("String"),
+        value.class = c("TsData", "Matrix", "DoubleSeq", "List<String>")
+    ) {
         key.class <- match.arg(key.class)
         value.class <- match.arg(value.class)
 
         jmap <- .jcall(result, "Ljava/util/Map;", method)
 
         jkey <- .jnew("java/lang/String", key)
-        jobject <- .jcall(jmap, "Ljava/lang/Object;", "get", .jcast(jkey, "java/lang/Object"))
+        jobject <- .jcall(
+            jmap,
+            "Ljava/lang/Object;",
+            "get",
+            .jcast(jkey, "java/lang/Object")
+        )
 
-        if(is.null(jobject)) return(NULL)
+        if (is.null(jobject)) return(NULL)
 
         if (value.class == "TsData") {
-            out <- rjd3toolkit::.jd2r_tsdata(.jcast(jobject, "jdplus/toolkit/base/api/timeseries/TsData"))
+            out <- rjd3toolkit::.jd2r_tsdata(.jcast(
+                jobject,
+                "jdplus/toolkit/base/api/timeseries/TsData"
+            ))
         } else if (value.class == "Matrix") {
             out <- rjd3toolkit::.jd2r_matrix(jobject)
         } else if (value.class == "DoubleSeq") {
@@ -1046,38 +1201,52 @@ multivariatechowlin <- function(series,
 
     for (i in seq_along(series)) {
         sname <- snames[i]
-        disagg[[sname]] <- .jd2r_lhmap(jrslt,
-                                       "getDisaggregatedSeries",
-                                       sname,
-                                       value.class = "TsData")
-        edisagg[[sname]] <- .jd2r_lhmap(jrslt,
-                                        "getStdevDisaggregatedSeries",
-                                        sname,
-                                        value.class = "TsData")
-        regeffect[[sname]] <- .jd2r_lhmap(jrslt,
-                                          "getRegressionEffects",
-                                          sname,
-                                          value.class = "TsData")
-        reg[[sname]] <- .jd2r_lhmap(jrslt,
-                                    "getRegressors",
-                                    sname,
-                                    value.class = "Matrix")
-        coef <- .jd2r_lhmap(jrslt,
-                            "getCoefficients",
-                            sname,
-                            value.class = "DoubleSeq")
+        disagg[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getDisaggregatedSeries",
+            sname,
+            value.class = "TsData"
+        )
+        edisagg[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getStdevDisaggregatedSeries",
+            sname,
+            value.class = "TsData"
+        )
+        regeffect[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getRegressionEffects",
+            sname,
+            value.class = "TsData"
+        )
+        reg[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getRegressors",
+            sname,
+            value.class = "Matrix"
+        )
+        coef <- .jd2r_lhmap(
+            jrslt,
+            "getCoefficients",
+            sname,
+            value.class = "DoubleSeq"
+        )
 
-        coef_var <- .jd2r_lhmap(jrslt,
-                                "getCoefficientsVariance",
-                                sname,
-                                value.class = "DoubleSeq")
+        coef_var <- .jd2r_lhmap(
+            jrslt,
+            "getCoefficientsVariance",
+            sname,
+            value.class = "DoubleSeq"
+        )
 
-        reg_names <- .jd2r_lhmap(jrslt,
-                                 "getRegressorsNames",
-                                 sname,
-                                 value.class = "List<String>")
+        reg_names <- .jd2r_lhmap(
+            jrslt,
+            "getRegressorsNames",
+            sname,
+            value.class = "List<String>"
+        )
 
-        if(!is.null(coef)) {
+        if (!is.null(coef)) {
             se <- sqrt(coef_var)
             t <- coef / se
             model[[sname]] <- data.frame(coef, se, t, row.names = reg_names)
@@ -1094,8 +1263,7 @@ multivariatechowlin <- function(series,
         disagg = disagg,
         edisagg = edisagg,
         regeffect = regeffect,
-        smoothingpart =
-            rjd3toolkit::.jd3_object(jrslt,"MTD", TRUE) |>
+        smoothingpart = rjd3toolkit::.jd3_object(jrslt, "MTD", TRUE) |>
             rjd3toolkit::result("smoothingpart"),
         parameters = rhos,
         # residuals -> TODO

@@ -52,10 +52,18 @@ NULL
 #' # Denton AFD with a preliminary series
 #' denton(s = x, t = Y, mul = FALSE)
 #'
-denton <- function(s = NULL, t, d = 1L, mul = TRUE, nfreq = 4L, modified = TRUE,
-                   conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
-                   obsposition = 1L, nbcsts = 0L, nfcsts = 0L) {
-
+denton <- function(
+    s = NULL,
+    t,
+    d = 1L,
+    mul = TRUE,
+    nfreq = 4L,
+    modified = TRUE,
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    obsposition = 1L,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     conversion <- match.arg(conversion)
 
     jd_t <- rjd3toolkit::.r2jd_tsdata(t)
@@ -65,8 +73,18 @@ denton <- function(s = NULL, t, d = 1L, mul = TRUE, nfreq = 4L, modified = TRUE,
     } else {
         jd_s <- as.integer(nfreq)
     }
-    jd_rslt <- .jcall("jdplus/benchmarking/base/r/Benchmarking", "Ljdplus/toolkit/base/api/timeseries/TsData;", "denton",
-                      jd_s, jd_t, as.integer(d), mul, modified, conversion, as.integer(obsposition))
+    jd_rslt <- .jcall(
+        "jdplus/benchmarking/base/r/Benchmarking",
+        "Ljdplus/toolkit/base/api/timeseries/TsData;",
+        "denton",
+        jd_s,
+        jd_t,
+        as.integer(d),
+        mul,
+        modified,
+        conversion,
+        as.integer(obsposition)
+    )
     rjd3toolkit::.jd2r_tsdata(jd_rslt)
 }
 
@@ -136,30 +154,60 @@ denton <- function(s = NULL, t, d = 1L, mul = TRUE, nfreq = 4L, modified = TRUE,
 #' denton_raw(x2, Y, freqratio = 5, conversion = "Last", startoffset = 1)
 #'
 #'
-denton_raw <- function(s = NULL, t, freqratio, d = 1L, mul = TRUE, modified = TRUE,
-					   conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
-					   obsposition = 1L, startoffset = 0L, nbcsts = 0L, nfcsts = 0L){
-
+denton_raw <- function(
+    s = NULL,
+    t,
+    freqratio,
+    d = 1L,
+    mul = TRUE,
+    modified = TRUE,
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    obsposition = 1L,
+    startoffset = 0L,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     conversion <- match.arg(conversion)
 
-    if(!(freqratio > 0L && freqratio %% 1L == 0.0)){
+    if (!(freqratio > 0L && freqratio %% 1L == 0.0)) {
         stop("'freqratio' must be a positive integer")
     }
-    if(!is.vector(t, mode = "numeric")){
+    if (!is.vector(t, mode = "numeric")) {
         stop("Aggregation constraint must be a numeric vector")
     }
-    if(!(is.vector(s, mode = "numeric") || is.null(s))){
+    if (!(is.vector(s, mode = "numeric") || is.null(s))) {
         stop("Preliminary series must be a numeric vector (or NULL)")
     }
 
-    if (!is.null(s)){
-        rslt <- .jcall("jdplus/benchmarking/base/r/Benchmarking",  "[D", "dentonRaw",
-						as.numeric(s), as.numeric(t), as.integer(freqratio), as.integer(d), mul,
-						modified, conversion, as.integer(obsposition), as.integer(startoffset))
+    if (!is.null(s)) {
+        rslt <- .jcall(
+            "jdplus/benchmarking/base/r/Benchmarking",
+            "[D",
+            "dentonRaw",
+            as.numeric(s),
+            as.numeric(t),
+            as.integer(freqratio),
+            as.integer(d),
+            mul,
+            modified,
+            conversion,
+            as.integer(obsposition),
+            as.integer(startoffset)
+        )
     } else {
-        rslt <- .jcall("jdplus/benchmarking/base/r/Benchmarking",  "[D", "dentonRaw",
-						as.numeric(t), as.integer(freqratio), as.integer(d), mul,
-						modified, conversion, as.integer(obsposition), as.integer(startoffset))
+        rslt <- .jcall(
+            "jdplus/benchmarking/base/r/Benchmarking",
+            "[D",
+            "dentonRaw",
+            as.numeric(t),
+            as.integer(freqratio),
+            as.integer(d),
+            mul,
+            modified,
+            conversion,
+            as.integer(obsposition),
+            as.integer(startoffset)
+        )
     }
     return(rslt)
 }
@@ -218,18 +266,35 @@ denton_raw <- function(s = NULL, t, freqratio, d = 1L, mul = TRUE, modified = TR
 #' x <- denton(t = Y, nfreq = 4) + rnorm(n = length(Y) * 4, mean = 0, sd = 10)
 #' grp(s = x, t = Y)
 #'
-grp <- function(s, t,
-				objective = c("Forward", "Backward", "Symmetric", "Log"),
-                conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
-                obsposition = 1L, eps = 1e-12, iter = 500L, dentoninitialization = TRUE) {
-  objective <- match.arg(objective)
-  conversion <- match.arg(conversion)
+grp <- function(
+    s,
+    t,
+    objective = c("Forward", "Backward", "Symmetric", "Log"),
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    obsposition = 1L,
+    eps = 1e-12,
+    iter = 500L,
+    dentoninitialization = TRUE
+) {
+    objective <- match.arg(objective)
+    conversion <- match.arg(conversion)
 
-  jd_s <- rjd3toolkit::.r2jd_tsdata(s)
-  jd_t <- rjd3toolkit::.r2jd_tsdata(t)
-  jd_rslt <- .jcall("jdplus/benchmarking/base/r/Benchmarking", "Ljdplus/toolkit/base/api/timeseries/TsData;", "grp",
-					jd_s, jd_t, objective, conversion, as.integer(obsposition), eps, as.integer(iter), as.logical(dentoninitialization))
-  rjd3toolkit::.jd2r_tsdata(jd_rslt)
+    jd_s <- rjd3toolkit::.r2jd_tsdata(s)
+    jd_t <- rjd3toolkit::.r2jd_tsdata(t)
+    jd_rslt <- .jcall(
+        "jdplus/benchmarking/base/r/Benchmarking",
+        "Ljdplus/toolkit/base/api/timeseries/TsData;",
+        "grp",
+        jd_s,
+        jd_t,
+        objective,
+        conversion,
+        as.integer(obsposition),
+        eps,
+        as.integer(iter),
+        as.logical(dentoninitialization)
+    )
+    rjd3toolkit::.jd2r_tsdata(jd_rslt)
 }
 
 #' @title Benchmarking by means of Cubic Splines
@@ -274,10 +339,13 @@ grp <- function(s, t,
 #' x2 <- ts(qna_data$TURN_Q_data[,"TURN_INDEX_FF"], frequency = 4, start = c(2009,1))
 #' cubicspline(s = x2, t = Y)
 #'
-cubicspline <- function(s = NULL, t, nfreq = 4L,
-                        conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
-                        obsposition = 1L) {
-
+cubicspline <- function(
+    s = NULL,
+    t,
+    nfreq = 4L,
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    obsposition = 1L
+) {
     conversion <- match.arg(conversion)
 
     jd_t <- rjd3toolkit::.r2jd_tsdata(t)
@@ -287,8 +355,15 @@ cubicspline <- function(s = NULL, t, nfreq = 4L,
     } else {
         jd_s <- as.integer(nfreq)
     }
-    jd_rslt <- .jcall("jdplus/benchmarking/base/r/Benchmarking", "Ljdplus/toolkit/base/api/timeseries/TsData;", "cubicSpline",
-                      jd_s, jd_t, conversion, as.integer(obsposition))
+    jd_rslt <- .jcall(
+        "jdplus/benchmarking/base/r/Benchmarking",
+        "Ljdplus/toolkit/base/api/timeseries/TsData;",
+        "cubicSpline",
+        jd_s,
+        jd_t,
+        conversion,
+        as.integer(obsposition)
+    )
     rjd3toolkit::.jd2r_tsdata(jd_rslt)
 }
 
@@ -356,17 +431,32 @@ cubicspline <- function(s = NULL, t, nfreq = 4L,
 #' # Pro-rating
 #' cholette(s = xm, t = Y, rho = 0, lambda = 0.5)
 #'
-cholette <- function(s, t, rho = 1., lambda = 1.,
-                     bias = c("None", "Additive", "Multiplicative"),
-                     conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
-                     obsposition = 1L) {
+cholette <- function(
+    s,
+    t,
+    rho = 1.,
+    lambda = 1.,
+    bias = c("None", "Additive", "Multiplicative"),
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    obsposition = 1L
+) {
     bias <- match.arg(bias)
     conversion <- match.arg(conversion)
 
     jd_s <- rjd3toolkit::.r2jd_tsdata(s)
     jd_t <- rjd3toolkit::.r2jd_tsdata(t)
-    jd_rslt <- .jcall("jdplus/benchmarking/base/r/Benchmarking", "Ljdplus/toolkit/base/api/timeseries/TsData;", "cholette",
-                      jd_s, jd_t, rho, lambda, bias, conversion, as.integer(obsposition))
+    jd_rslt <- .jcall(
+        "jdplus/benchmarking/base/r/Benchmarking",
+        "Ljdplus/toolkit/base/api/timeseries/TsData;",
+        "cholette",
+        jd_s,
+        jd_t,
+        rho,
+        lambda,
+        bias,
+        conversion,
+        as.integer(obsposition)
+    )
     rjd3toolkit::.jd2r_tsdata(jd_rslt)
 }
 
@@ -482,15 +572,29 @@ cholette <- function(s, t, rho = 1., lambda = 1.,
 #'
 #' multivariatecholette(xlist = data.list, tcvector = tc, ccvector = cc)
 #'
-multivariatecholette <- function(xlist, tcvector = NULL, ccvector = NULL, rho = 0.8, lambda = 0.5) {
+multivariatecholette <- function(
+    xlist,
+    tcvector = NULL,
+    ccvector = NULL,
+    rho = 0.8,
+    lambda = 0.5
+) {
     if (!is.list(xlist) || length(xlist) < 3L) {
-        stop("incorrect argument, first argument should be a list of at least 3 time series")
+        stop(
+            "incorrect argument, first argument should be a list of at least 3 time series"
+        )
     }
 
     #create the input
     jdic <- .jnew("jdplus/toolkit/base/r/util/Dictionary")
-    for (i in seq_along(xlist)){
-        .jcall(jdic, "V", "add", names(xlist[i]), rjd3toolkit::.r2jd_tsdata(xlist[[i]]))
+    for (i in seq_along(xlist)) {
+        .jcall(
+            jdic,
+            "V",
+            "add",
+            names(xlist[i]),
+            rjd3toolkit::.r2jd_tsdata(xlist[[i]])
+        )
     }
     if (is.null(tcvector)) {
         ntc <- 0L
@@ -499,7 +603,9 @@ multivariatecholette <- function(xlist, tcvector = NULL, ccvector = NULL, rho = 
         ntc <- length(tcvector)
         jtc <- .jarray(tcvector, "java/lang/String")
     } else {
-        stop("incorrect argument, constraints should be presented within a character vector")
+        stop(
+            "incorrect argument, constraints should be presented within a character vector"
+        )
     }
     if (is.null(ccvector)) {
         ncc <- 0L
@@ -508,22 +614,39 @@ multivariatecholette <- function(xlist, tcvector = NULL, ccvector = NULL, rho = 
         ncc <- length(ccvector)
         jcc <- .jarray(ccvector, "java/lang/String")
     } else {
-        stop("incorrect argument, constraints should be presented within a character vector")
+        stop(
+            "incorrect argument, constraints should be presented within a character vector"
+        )
     }
     if (ntc + ncc == 0L) {
-        stop("both constraint types are empty, include at least one temporal or contemporaneous constraint")
+        stop(
+            "both constraint types are empty, include at least one temporal or contemporaneous constraint"
+        )
     }
 
-    jd_rslt <- .jcall("jdplus/benchmarking/base/r/Benchmarking", "Ljdplus/toolkit/base/r/util/Dictionary;", "multiCholette",
-                      jdic,  jtc, jcc, rho, lambda)
+    jd_rslt <- .jcall(
+        "jdplus/benchmarking/base/r/Benchmarking",
+        "Ljdplus/toolkit/base/r/util/Dictionary;",
+        "multiCholette",
+        jdic,
+        jtc,
+        jcc,
+        rho,
+        lambda
+    )
     if (is.jnull(jd_rslt)) {
         return(NULL)
     }
     rlist <- list()
     rnames <- intersect(names(xlist), .jcall(jd_rslt, "[S", "names"))
     for (i in seq_along(rnames)) {
-        jts <- .jcall(jd_rslt, "Ljdplus/toolkit/base/api/timeseries/TsData;", "get", rnames[i])
-        if (! is.jnull(jts)) {
+        jts <- .jcall(
+            jd_rslt,
+            "Ljdplus/toolkit/base/api/timeseries/TsData;",
+            "get",
+            rnames[i]
+        )
+        if (!is.jnull(jts)) {
             rlist[[rnames[i]]] <- rjd3toolkit::.jd2r_tsdata(jts)
         }
     }
