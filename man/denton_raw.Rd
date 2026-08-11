@@ -21,23 +21,33 @@ denton_raw(
 \arguments{
 \item{s}{A preliminary series. If not \code{NULL}, it must be a numeric vector.}
 
-\item{t}{The low-frequency aggregation constraint. It must be a numeric vector.}
+\item{t}{The low-frequency aggregation constraint. It must be a numeric
+vector.}
 
-\item{freqratio}{An integer specifying the frequency ratio between the benchmarked series and the low-frequency constraint.
+\item{freqratio}{An integer specifying the frequency ratio between the
+benchmarked series and the low-frequency constraint.
 This argument is mandatory and must be a positive integer.}
 
 \item{d}{An integer specifying the differencing order. The default is \code{1}.}
 
-\item{mul}{Boolean. Indicates whether benchmarking is multiplicative (\code{TRUE}) or additive (\code{FALSE}). The default is multiplicative.}
+\item{mul}{Boolean. Indicates whether benchmarking is multiplicative
+(\code{TRUE}) or additive (\code{FALSE}). The default is multiplicative.}
 
-\item{modified}{Boolean. Specifies whether the modified Denton method (\code{TRUE}) or the unmodified Denton method (\code{FALSE}) is applied. The default is \code{TRUE}.}
+\item{modified}{Boolean. Specifies whether the modified Denton method
+(\code{TRUE}) or the unmodified Denton method (\code{FALSE}) is applied. The default
+is \code{TRUE}.}
 
-\item{conversion}{A character string specifying the conversion mode, typically \code{"Sum"} (the default) or \code{"Average"}. Other options are: \code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
+\item{conversion}{A character string specifying the conversion mode,
+typically \code{"Sum"} (the default) or \code{"Average"}. Other options are:
+\code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
 
-\item{obsposition}{An integer specifying the position of the observations of the low-frequency constraint within the benchmarked series (e.g. the 7th month of the year).
+\item{obsposition}{An integer specifying the position of the observations
+of the low-frequency constraint within the benchmarked series (e.g. the
+7th month of the year).
 This argument is used only when \code{conversion = "UserDefined"}.}
 
-\item{startoffset}{The number of initial observations in the preliminary series that precede the start of the low-frequency constraint.
+\item{startoffset}{The number of initial observations in the preliminary
+series that precede the start of the low-frequency constraint.
 The value must be either 0 or a positive integer (default is 0).
 This argument is ignored when no preliminary series is provided.}
 

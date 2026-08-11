@@ -20,56 +20,96 @@ multivariatechowlin(
 )
 }
 \arguments{
-\item{series}{A named list of \code{ts} objects containing the low frequency time series to be disaggregated.}
+\item{series}{A named list of \code{ts} objects containing the low frequency time
+series to be disaggregated.}
 
-\item{constant}{Either a Boolean or a vector of Booleans. If a vector is provided, each element specifies whether a constant term is included in the model for each series, following the order in which they appear in the \code{series} object.
+\item{constant}{Either a Boolean or a vector of Booleans. If a vector is
+provided, each element specifies whether a constant term is included in
+the model for each series, following the order in which they appear in the
+\code{series} object.
 The length of the the vector must match the number of series.
-If a single Boolean is provided (default if \code{TRUE}), it is applied to all series.
-Note that this argument is used only with Chow-Lin model (i.e., when \code{rhos} values are strictly less than 1). For further details, see the package vignette.}
+If a single Boolean is provided (default if \code{TRUE}), it is applied to all
+series.
+Note that this argument is used only with Chow-Lin model (i.e., when
+\code{rhos} values are strictly less than 1). For further details, see the
+package vignette.}
 
-\item{trend}{Either a Boolean or a vector of Booleans. If a vector is provided, each element specifies whether a linear trend is included in the model for each series, following the order in which they appear in the \code{series} object.
+\item{trend}{Either a Boolean or a vector of Booleans. If a vector is
+provided, each element specifies whether a linear trend is included in the
+model for each series, following the order in which they appear in the
+\code{series} object.
 The length of the the vector must match the number of series.
-If a single Boolean is provided (default if \code{FALSE}), it is applied to all series.}
+If a single Boolean is provided (default if \code{FALSE}), it is applied to all
+series.}
 
-\item{indicators}{a named list of \code{ts} objects or a named list of a list of \code{ts} objects. Each element represents one or more high-frequency indicator series associated with each series.
-If an element is \code{NULL}, no indicator is used for the corresponding series. The default value is \code{NULL}, meaning that no indicators are used for any series.}
+\item{indicators}{a named list of \code{ts} objects or a named list of a list of
+\code{ts} objects. Each element represents one or more high-frequency indicator
+series associated with each series.
+If an element is \code{NULL}, no indicator is used for the corresponding
+series. The default value is \code{NULL}, meaning that no indicators are used
+for any series.}
 
-\item{ccseries}{A named list of \code{ts} objects containing the contemporaneous constraints. If \code{NULL} (the default), no contemporaneous constraints can be considered.}
+\item{ccseries}{A named list of \code{ts} objects containing the contemporaneous
+constraints. If \code{NULL} (the default), no contemporaneous constraints can
+be considered.}
 
-\item{ccdefinition}{A character vector defining each contemporaneous constraints. The elements of the vector must be written in the form \eqn{z=w_1 y_1+\ldots+w_n y_n} or \eqn{c=w_1 y_1+\ldots+w_n y_n} where:
+\item{ccdefinition}{A character vector defining each contemporaneous
+constraints. The elements of the vector must be written in the form
+\eqn{z=w_1 y_1+\ldots+w_n y_n} or \eqn{c=w_1 y_1+\ldots+w_n y_n} where:
 \itemize{
 \item \eqn{z} is the name of a contemporaneous constraint,
 \item \eqn{(w_1,\ldots,w_n)} are optional numeric weights,
 \item \eqn{(y_1,\ldots,y_n)} are the names of the time series and
 \item \eqn{c} is a constant.
-The default is \code{NULL}, meaning that no contemporaneous constraint is considered.
+The default is \code{NULL}, meaning that no contemporaneous constraint is
+considered.
 }}
 
-\item{freq}{An integer giving the annual frequency of the disaggregated series.
-This argument is ignored when at least one indicator series is provided for any series.}
+\item{freq}{An integer giving the annual frequency of the disaggregated
+series.
+This argument is ignored when at least one indicator series is provided
+for any series.}
 
-\item{rhos}{Either a numeric value or a vector of numerics. If a vector is provided, each element specifies the value of the \code{rho} parameter associated to each series, following the order in which they appear in the \code{series} object.
+\item{rhos}{Either a numeric value or a vector of numerics. If a vector is
+provided, each element specifies the value of the \code{rho} parameter
+associated to each series, following the order in which they appear in the
+\code{series} object.
 The length of the the vector must match the number of series.
-If a single numeric value is provided (default if \code{1}, corresponding to the Fernandez model), it is applied to all series.}
+If a single numeric value is provided (default if \code{1}, corresponding to
+the Fernandez model), it is applied to all series.}
 
-\item{var}{A character string specifying the method used to estimate the variance-covariance matrix of the innovations.
-The default is \code{"fromUnivariate"}, meaning that is is estimated from the residuals of the univariate models. Others options include \code{"allEquals"}, which assume a diagonal matrix with identical variances (a strong assumption), and \code{"userDefined"}, where the matrix is supplied by the user via the \code{var.matrix} argument. For additional details, see the package vignette.}
+\item{var}{A character string specifying the method used to estimate the
+variance-covariance matrix of the innovations.
+The default is \code{"fromUnivariate"}, meaning that is is estimated from the
+residuals of the univariate models. Others options include \code{"allEquals"},
+which assume a diagonal matrix with identical variances (a strong
+assumption), and \code{"userDefined"}, where the matrix is supplied by the user
+via the \code{var.matrix} argument. For additional details, see the package
+vignette.}
 
-\item{var.includeCov}{Boolean. Indicates whether non-diagonal elements of the innovation variance-covariance matrix may as well be estimated from the residuals of the univariate models. The default is \code{FALSE}, meaning that only a diagonal matrix is estimated.
+\item{var.includeCov}{Boolean. Indicates whether non-diagonal elements of
+the innovation variance-covariance matrix may as well be estimated from
+the residuals of the univariate models. The default is \code{FALSE}, meaning
+that only a diagonal matrix is estimated.
 This argument is used only when \code{var = "fromUnivariate"}.}
 
-\item{var.shrinkCov}{Boolean. Indicates whether a shrinkage covariance estimator should be used. See the vignette for more details.
-This argument is used only when \code{var = "fromUnivariate"} and \code{var.includeCov = TRUE}.}
+\item{var.shrinkCov}{Boolean. Indicates whether a shrinkage covariance
+estimator should be used. See the vignette for more details.
+This argument is used only when \code{var = "fromUnivariate"} and
+\code{var.includeCov = TRUE}.}
 
 \item{var.matrix}{The variance-covariance matrix of the innovations.
-This argument is used only when \code{var = "userDefined"} and must be provided in that case.}
+This argument is used only when \code{var = "userDefined"} and must be provided
+in that case.}
 }
 \value{
-An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The following are returned
-invisibly as a list:
+An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The
+following are returned invisibly as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients for each series;
-\item \code{estimation} \verb{[[2]]} disaggregated Time-Series and standard deviation for each series, regression effects, smoothing part, parameter and variance-covariance matrix;
+\item \code{estimation} \verb{[[2]]} disaggregated Time-Series and standard deviation for
+each series, regression effects, smoothing part, parameter and
+variance-covariance matrix;
 }
 }
 \description{

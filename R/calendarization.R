@@ -80,7 +80,14 @@ NULL
 #'
 #' yq_2 <- cal_2$rslt
 #'
-calendarization <- function(calendarobs, freq, start = NULL, end = NULL, dailyweights = NULL, stde = FALSE) {
+calendarization <- function(
+    calendarobs,
+    freq,
+    start = NULL,
+    end = NULL,
+    dailyweights = NULL,
+    stde = FALSE
+) {
     jcal <- rjd3toolkit::r2jd_calendarts(calendarobs)
     if (is.null(dailyweights)) {
         jw <- .jnull("[D")
@@ -97,8 +104,17 @@ calendarization <- function(calendarobs, freq, start = NULL, end = NULL, dailywe
     } else {
         jend <- as.character(end)
     }
-    jrslt <- .jcall("jdplus/benchmarking/base/r/Calendarization", "Ljdplus/benchmarking/base/api/calendarization/CalendarizationResults;",
-                    "process", jcal, as.integer(freq), jstart, jend, jw, as.logical(stde))
+    jrslt <- .jcall(
+        "jdplus/benchmarking/base/r/Calendarization",
+        "Ljdplus/benchmarking/base/api/calendarization/CalendarizationResults;",
+        "process",
+        jcal,
+        as.integer(freq),
+        jstart,
+        jend,
+        jw,
+        as.logical(stde)
+    )
 
     if (stde) {
         rslt <- rjd3toolkit::.proc_ts(jrslt, "agg")
@@ -106,7 +122,13 @@ calendarization <- function(calendarobs, freq, start = NULL, end = NULL, dailywe
         start <- as.Date(rjd3toolkit::.proc_str(jrslt, "start"))
         days <- rjd3toolkit::.proc_vector(jrslt, "days")
         edays <- rjd3toolkit::.proc_vector(jrslt, "edays")
-        return(list(rslt = rslt, erslt = erslt, start = start, days = days, edays = edays))
+        return(list(
+            rslt = rslt,
+            erslt = erslt,
+            start = start,
+            days = days,
+            edays = edays
+        ))
     } else {
         rslt <- rjd3toolkit::.proc_ts(jrslt, "agg")
         start <- as.Date(rjd3toolkit::.proc_str(jrslt, "start"))

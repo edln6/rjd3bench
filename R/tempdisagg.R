@@ -9,41 +9,62 @@ NULL
 #' series by regression models. The implemented models include Chow-Lin,
 #' Fernandez, Litterman and some variants of those algorithms.
 #'
-#' @param series A low-frequency time series to be disaggregated. It must be a `"ts"` object.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high-frequency indicator series used in the temporal disaggregation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a `"ts"` object or a list of `"ts"` objects.
-#' @param model A character string specifying the model of the error term at the disaggregated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freq An integer giving the annual frequency of the disaggregated series.
-#' This argument is ignored when one or more indicator series is provided.
-#' @param average Boolean. Indicates whether an average conversion should be considered. The default is `FALSE`, corresponding to additive conversion.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#' @param series A low-frequency time series to be disaggregated. It must be a
+#'   `"ts"` object.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information, see the package
+#'   vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high-frequency indicator series used in the
+#'   temporal disaggregation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a `"ts"` object or a list of `"ts"` objects.
+#' @param model A character string specifying the model of the error term at
+#'   the disaggregated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and
+#'   `"RwAr1"` (Litterman).
+#' @param freq An integer giving the annual frequency of the disaggregated
+#'   series.
+#'   This argument is ignored when one or more indicator series is provided.
+#' @param average Boolean. Indicates whether an average conversion should be
+#'   considered. The default is `FALSE`, corresponding to additive conversion.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_TEMPDISAGG_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_TEMPDISAGG_RSLTS" is returned. The following
+#' are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation, regression effects, smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation,
+#'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
 #'
 #' @seealso `temporal_interpolation()` for interpolation,
 #'
-#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical frequency series,
+#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical
+#' frequency series,
 #'
 #' `temporal_interpolation_raw()` for interpolation of atypical frequency series
 #'
@@ -76,31 +97,31 @@ NULL
 #' td3$estimation$disagg
 #'
 temporal_disaggregation <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freq = 4L,
-        average = FALSE,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
-	model <- match.arg(model)
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freq = 4L,
+    average = FALSE,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
+    model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
     if (model != "Ar1" && !zeroinitialization) {
         constant <- FALSE
     }
 
     jseries <- rjd3toolkit::.r2jd_tsdata(series)
-	if (!is.null(indicators)) {
-	    jlist <- list()
+    if (!is.null(indicators)) {
+        jlist <- list()
         if (is.list(indicators)) {
             for (i in seq_along(indicators)) {
                 jlist[[i]] <- rjd3toolkit::.r2jd_tsdata(indicators[[i]])
@@ -110,26 +131,49 @@ temporal_disaggregation <- function(
         } else {
             stop("Invalid indicators")
         }
-        jindicators <- .jarray(jlist, contents.class = "jdplus/toolkit/base/api/timeseries/TsData")
+        jindicators <- .jarray(
+            jlist,
+            contents.class = "jdplus/toolkit/base/api/timeseries/TsData"
+        )
 
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processDisaggregation",
-            jseries, constant, trend, jindicators, model, average, rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            jseries,
+            constant,
+            trend,
+            jindicators,
+            model,
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
     } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processDisaggregation",
-            jseries, constant, trend, model, as.integer(freq), average, rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            jseries,
+            constant,
+            trend,
+            model,
+            as.integer(freq),
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
-
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
@@ -178,36 +222,58 @@ temporal_disaggregation <- function(
 #' `temporal_disaggregation_raw()` function extends `temporal_disaggregation()`
 #' by allowing temporal disaggregation for any frequency ratio.
 #'
-#' @param series A low-frequency time series to be disaggregated. It must be a numeric vector.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information on this, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high-frequency indicator series used in the temporal disaggregation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a numeric vector or a matrix.
-#' @param startoffset The number of initial observations in the indicator series that precede the start of the low-frequency series.
-#' The value must be either 0 or a positive integer (default is 0). This argument is ignored when no indicator is provided.
-#' @param model A character string specifying the model of the error term at the disaggregated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freqratio An integer specifying the frequency ratio between the disaggregated series and the low-frequency series.
-#' This argument is mandatory and must be a positive integer.
-#' @param average Boolean. Indicates whether an average conversion should be considered. The default is `FALSE`, corresponding to additive conversion.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#' @param series A low-frequency time series to be disaggregated. It must be a
+#'   numeric vector.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information on this, see the
+#'   package vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high-frequency indicator series used in the
+#'   temporal disaggregation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a numeric vector or a matrix.
+#' @param startoffset The number of initial observations in the indicator
+#'   series that precede the start of the low-frequency series.
+#'   The value must be either 0 or a positive integer (default is 0). This
+#'   argument is ignored when no indicator is provided.
+#' @param model A character string specifying the model of the error term at
+#'   the disaggregated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and
+#'   `"RwAr1"` (Litterman).
+#' @param freqratio An integer specifying the frequency ratio between the
+#'   disaggregated series and the low-frequency series.
+#'   This argument is mandatory and must be a positive integer.
+#' @param average Boolean. Indicates whether an average conversion should be
+#'   considered. The default is `FALSE`, corresponding to additive conversion.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The
+#' following are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` disaggregated values and standard deviation, regression effects, smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` disaggregated values and standard deviation,
+#'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
@@ -244,26 +310,26 @@ temporal_disaggregation <- function(
 #' td3$estimation$disagg
 #'
 temporal_disaggregation_raw <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        startoffset = 0L,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freqratio,
-        average = FALSE,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    startoffset = 0L,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freqratio,
+    average = FALSE,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
-    if(!is.vector(series, mode = "numeric")){
+    if (!is.vector(series, mode = "numeric")) {
         stop("The input series must be a numeric vector")
     }
     if (model != "Ar1" && !zeroinitialization) {
@@ -275,46 +341,69 @@ temporal_disaggregation_raw <- function(
             jindicators <- rjd3toolkit::.r2jd_matrix(indicators)
         } else if (is.vector(indicators, mode = "numeric")) {
             jindicators <- rjd3toolkit::.r2jd_matrix(as.matrix(indicators))
-        } else{
+        } else {
             stop("Indicators must be either a numeric vector or a matrix")
         }
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawDisaggregation",
-            as.numeric(series), constant, trend, jindicators, as.integer(startoffset), model,
-            as.integer(freqratio), average, rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            as.numeric(series),
+            constant,
+            trend,
+            jindicators,
+            as.integer(startoffset),
+            model,
+            as.integer(freqratio),
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
-    } else{
+    } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawDisaggregation",
-            as.numeric(series), constant, trend, model, as.integer(freqratio), average,
-            rho, rho.fixed, rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            as.numeric(series),
+            constant,
+            trend,
+            model,
+            as.integer(freqratio),
+            average,
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
-    vars <- c()
-    if(constant) vars <- "C"
-    if(trend) vars <- c(vars, "Trend")
+    vars <- NULL
+    if (constant) vars <- "C"
+    if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
         if (is.matrix(indicators)) {
-            for (i in 1:ncol(indicators)) {
+            for (i in seq_len(ncol(indicators))) {
                 vars <- c(vars, paste0("var", i))
             }
+        } else {
+            vars <- c(vars, "var1")
         }
-        else vars <- c(vars, "var1")
     }
     coef <- rjd3toolkit::.proc_vector(jrslt, "coeff")
     se <- sqrt(diag(bcov))
-    t <- coef/se
+    t <- coef / se
     m <- data.frame(coef, se, t)
-    if(nrow(m) > 0) row.names(m) <- vars
+    if (nrow(m) > 0) row.names(m) <- vars
 
     regression <- list(
         type = model,
@@ -327,7 +416,11 @@ temporal_disaggregation_raw <- function(
         disagg = rjd3toolkit::.proc_vector(jrslt, "disagg"),
         edisagg = rjd3toolkit::.proc_vector(jrslt, "edisagg"),
         regeffect = rjd3toolkit::.proc_vector(jrslt, "regeffect"),
-        smoothingpart = ifelse(!is.null(vars), rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"), NaN),
+        smoothingpart = ifelse(
+            !is.null(vars),
+            rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"),
+            NaN
+        ),
         parameter = rjd3toolkit::.proc_numeric(jrslt, "parameter"),
         eparameter = rjd3toolkit::.proc_numeric(jrslt, "eparameter"),
         residuals = .proc_residuals(jrslt, freqratio)
@@ -351,39 +444,58 @@ temporal_disaggregation_raw <- function(
 #' series by regression models. The implemented models include Chow-Lin,
 #' Fernandez, Litterman and some variants of those algorithms.
 #'
-#' @param series A low-frequency time series to be interpolated. It must be a `"ts"` object.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high-frequency indicator series used in the temporal interpolation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a `"ts"` object or a list of `"ts"` objects.
-#' @param model A character string specifying the model of the error term at the interpolated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freq An integer giving the annual frequency of the interpolated series.
-#' This argument is ignored when one or more indicator series is provided.
+#' @param series A low-frequency time series to be interpolated. It must be a
+#'   `"ts"` object.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information, see the package
+#'   vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high-frequency indicator series used in the
+#'   temporal interpolation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a `"ts"` object or a list of `"ts"` objects.
+#' @param model A character string specifying the model of the error term at
+#'   the interpolated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
+#' @param freq An integer giving the annual frequency of the interpolated
+#'   series.
+#'   This argument is ignored when one or more indicator series is provided.
 #' @param obsposition An integer specifying the position of the low-frequency
 #'   observations within the interpolated series (e.g. the 1st month of the
-#'   year, the 2d month, etc.). The value must be a positive integer or `-1` (the
-#'   default). The default value is equivalent to setting the value of the
-#'   parameter equal to the frequency of the series, meaning that the last value
-#'   of the interpolated series is consistent with the low-frequency series.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#'   year, the 2d month, etc.). The value must be a positive integer or `-1`
+#'   (the default). The default value is equivalent to setting the value of the
+#'   parameter equal to the frequency of the series, meaning that the last
+#'   value of the interpolated series is consistent with the low-frequency
+#'   series.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_INTERP_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_INTERP_RSLTS" is returned. The following are
+#' returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` interpolated Time-Series and standard deviation, regression effects and smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` interpolated Time-Series and standard deviation,
+#'   regression effects and smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
@@ -392,7 +504,8 @@ temporal_disaggregation_raw <- function(
 #'
 #' `temporal_interpolation_raw()` for interpolation of atypical frequency series,
 #'
-#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical frequency series
+#' `temporal_disaggregation_raw()` for temporal disaggregation of atypical
+#' frequency series
 #'
 #'
 #' For more information, see the vignette:
@@ -420,30 +533,30 @@ temporal_disaggregation_raw <- function(
 #' ti4$estimation$interp
 #'
 temporal_interpolation <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freq = 4L,
-        obsposition = -1L,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freq = 4L,
+    obsposition = -1L,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
     if (model != "Ar1" && !zeroinitialization) {
         constant <- FALSE
     }
-    if(obsposition > 0){
+    if (obsposition > 0) {
         obsposition <- obsposition - 1L
-    }else if (obsposition != -1){
+    } else if (obsposition != -1) {
         stop("obsposition must be set to -1 (default) or a positive integer")
     }
 
@@ -459,26 +572,49 @@ temporal_interpolation <- function(
         } else {
             stop("Invalid indicators")
         }
-        jindicators <- .jarray(jlist, contents.class = "jdplus/toolkit/base/api/timeseries/TsData")
+        jindicators <- .jarray(
+            jlist,
+            contents.class = "jdplus/toolkit/base/api/timeseries/TsData"
+        )
 
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processInterpolation",
-            jseries, constant, trend, jindicators, model, as.integer(obsposition), rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            jseries,
+            constant,
+            trend,
+            jindicators,
+            model,
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
     } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationResults;",
             method = "processInterpolation",
-            jseries, constant, trend, model, as.integer(freq), as.integer(obsposition), rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            jseries,
+            constant,
+            trend,
+            model,
+            as.integer(freq),
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
-
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
@@ -529,41 +665,62 @@ temporal_interpolation <- function(
 #' `temporal_interpolation_raw()` function extends `temporal_interpolation()` by
 #' allowing temporal interpolation for any frequency ratio.
 #'
-#' @param series A low-frequency time series to be interpolated. It must be a numeric vector.
-#' @param constant Boolean. Indicates whether a constant term is included in the model. The default is `TRUE`.
-#' Note that this argument is used only with `model = "Ar1"` when `zeroinitialization = FALSE`. For additional information, see the package vignette.
-#' @param trend Boolean. Indicates whether a linear trend is included in the model. The default is `FALSE`.
-#' @param indicators One or more high frequency indicator series used in the interpolation.
-#' If `NULL` (the default), no indicator is used. When provided, the argument must be a numeric vector or a matrix.
-#' @param startoffset The number of initial observations in the indicator series that precede the start of the low-frequency series.
-#' The value must be either 0 or a positive integer (default is 0). This argument is ignored when no indicator is provided.
-#' @param model A character string specifying the model of the error term at the disaggregated level.
-#' The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and `"RwAr1"` (Litterman).
-#' @param freqratio An integer specifying the frequency ratio between the interpolated series and the low-frequency series.
-#' This argument is mandatory and must be a positive integer.
+#' @param series A low-frequency time series to be interpolated. It must be a
+#'   numeric vector.
+#' @param constant Boolean. Indicates whether a constant term is included in
+#'   the model. The default is `TRUE`.
+#'   Note that this argument is used only with `model = "Ar1"` when
+#'   `zeroinitialization = FALSE`. For additional information, see the package
+#'   vignette.
+#' @param trend Boolean. Indicates whether a linear trend is included in the
+#'   model. The default is `FALSE`.
+#' @param indicators One or more high frequency indicator series used in the
+#'   interpolation.
+#'   If `NULL` (the default), no indicator is used. When provided, the argument
+#'   must be a numeric vector or a matrix.
+#' @param startoffset The number of initial observations in the indicator
+#'   series that precede the start of the low-frequency series.
+#'   The value must be either 0 or a positive integer (default is 0). This
+#'   argument is ignored when no indicator is provided.
+#' @param model A character string specifying the model of the error term at
+#'   the disaggregated level.
+#'   The options are: `"Ar1"` (Chow Lin, the default), `"Rw"` (Fernandez), and
+#'   `"RwAr1"` (Litterman).
+#' @param freqratio An integer specifying the frequency ratio between the
+#'   interpolated series and the low-frequency series.
+#'   This argument is mandatory and must be a positive integer.
 #' @param obsposition An integer specifying the position of the low-frequency
 #'   observations within the interpolated series (e.g. the 1st month of the
 #'   year, the 2d month, etc.). The value must be a positive integer or `-1`
 #'   (the default).The default value is equivalent to setting the value of the
 #'   parameter equal to the frequency of the series, meaning that the last value
 #'   of the interpolated series is consistent with the low-frequency series.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' This argument is used only for `"Ar1"` and `"RwAr1"` models.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
-#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the autoregressive model are set to zero. The default is `FALSE`.
-#' @param diffuse.algorithm A character string specifying the algorithm used for diffuse initialization. The default is `"SqrtDiffuse"`. Other options are: `"Diffuse"` and `"Augmented"`.
-#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the regression model are treated as diffuse (`TRUE`) or as fixed unknown (`FALSE`, the default).
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#'   This argument is used only for `"Ar1"` and `"RwAr1"` models.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
+#' @param zeroinitialization Boolean. If `TRUE`, the initial values of the
+#'   autoregressive model are set to zero. The default is `FALSE`.
+#' @param diffuse.algorithm A character string specifying the algorithm used
+#'   for diffuse initialization. The default is `"SqrtDiffuse"`. Other options
+#'   are: `"Diffuse"` and `"Augmented"`.
+#' @param diffuse.regressors Boolean. Indicates whether the coefficients of the
+#'   regression model are treated as diffuse (`TRUE`) or as fixed unknown
+#'   (`FALSE`, the default).
 #' @param nbcsts An integer specifying the number of backcast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #' @param nfcsts An integer specifying the number of forecast periods.
 #' This argument is ignored when one or more indicator series is provided.
 #'
-#' @return An object of class "JD3_INTERPRAW_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_INTERPRAW_RSLTS" is returned. The following
+#' are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` interpolated values and standard deviation, regression effects, smoothing part, parameter and residuals;
+#' * `estimation` `[[2]]` interpolated values and standard deviation,
+#'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
 #' @export
@@ -608,34 +765,34 @@ temporal_interpolation <- function(
 #' ti4$estimation$interp
 #'
 temporal_interpolation_raw <- function(
-        series,
-        constant = TRUE,
-        trend = FALSE,
-        indicators = NULL,
-        startoffset = 0L,
-        model = c("Ar1", "Rw", "RwAr1"),
-        freqratio,
-        obsposition = -1L,
-        rho = 0.0,
-        rho.fixed = FALSE,
-        rho.truncated = 0.0,
-        zeroinitialization = FALSE,
-        diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
-        diffuse.regressors = FALSE,
-        nbcsts = 0L,
-        nfcsts = 0L) {
-
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    startoffset = 0L,
+    model = c("Ar1", "Rw", "RwAr1"),
+    freqratio,
+    obsposition = -1L,
+    rho = 0.0,
+    rho.fixed = FALSE,
+    rho.truncated = 0.0,
+    zeroinitialization = FALSE,
+    diffuse.algorithm = c("SqrtDiffuse", "Diffuse", "Augmented"),
+    diffuse.regressors = FALSE,
+    nbcsts = 0L,
+    nfcsts = 0L
+) {
     model <- match.arg(model)
     diffuse.algorithm <- match.arg(diffuse.algorithm)
-    if(!is.vector(series, mode = "numeric")){
+    if (!is.vector(series, mode = "numeric")) {
         stop("The input series must be a numeric vector")
     }
     if (model != "Ar1" && !zeroinitialization) {
         constant <- FALSE
     }
-    if(obsposition > 0){
+    if (obsposition > 0) {
         obsposition <- obsposition - 1L
-    }else if (obsposition != -1){
+    } else if (obsposition != -1) {
         stop("obsposition must be set to -1 (default) or a positive integer")
     }
 
@@ -644,46 +801,69 @@ temporal_interpolation_raw <- function(
             jindicators <- rjd3toolkit::.r2jd_matrix(indicators)
         } else if (is.vector(indicators, mode = "numeric")) {
             jindicators <- rjd3toolkit::.r2jd_matrix(as.matrix(indicators))
-        } else{
+        } else {
             stop("Indicators must be either a numeric vector or a matrix")
         }
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawInterpolation",
-            as.numeric(series), constant, trend, jindicators, as.integer(startoffset), model,
-            as.integer(freqratio), as.integer(obsposition), rho, rho.fixed,
-            rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors
+            as.numeric(series),
+            constant,
+            trend,
+            jindicators,
+            as.integer(startoffset),
+            model,
+            as.integer(freqratio),
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors
         )
-    } else{
+    } else {
         jrslt <- .jcall(
             obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
             returnSig = "Ljdplus/benchmarking/base/core/univariate/RawTemporalDisaggregationResults;",
             method = "processRawInterpolation",
-            as.numeric(series), constant, trend, model, as.integer(freqratio), as.integer(obsposition),
-            rho, rho.fixed, rho.truncated, zeroinitialization, diffuse.algorithm, diffuse.regressors,
-            as.integer(nbcsts), as.integer(nfcsts)
+            as.numeric(series),
+            constant,
+            trend,
+            model,
+            as.integer(freqratio),
+            as.integer(obsposition),
+            rho,
+            rho.fixed,
+            rho.truncated,
+            zeroinitialization,
+            diffuse.algorithm,
+            diffuse.regressors,
+            as.integer(nbcsts),
+            as.integer(nfcsts)
         )
     }
 
     # Build the S3 result
     bcov <- rjd3toolkit::.proc_matrix(jrslt, "covar")
-    vars <- c()
-    if(constant) vars <- "C"
-    if(trend) vars <- c(vars, "Trend")
+    vars <- NULL
+    if (constant) vars <- "C"
+    if (trend) vars <- c(vars, "Trend")
     if (!is.null(indicators)) {
         if (is.matrix(indicators)) {
-            for (i in 1:ncol(indicators)) {
+            for (i in seq_len(ncol(indicators))) {
                 vars <- c(vars, paste0("var", i))
             }
+        } else {
+            vars <- c(vars, "var1")
         }
-        else vars <- c(vars, "var1")
     }
     coef <- rjd3toolkit::.proc_vector(jrslt, "coeff")
     se <- sqrt(diag(bcov))
-    t <- coef/se
+    t <- coef / se
     m <- data.frame(coef, se, t)
-    if(nrow(m) > 0) row.names(m) <- vars
+    if (nrow(m) > 0) row.names(m) <- vars
 
     regression <- list(
         type = model,
@@ -696,7 +876,11 @@ temporal_interpolation_raw <- function(
         interp = rjd3toolkit::.proc_vector(jrslt, "disagg"),
         einterp = rjd3toolkit::.proc_vector(jrslt, "edisagg"),
         regeffect = rjd3toolkit::.proc_vector(jrslt, "regeffect"),
-        smoothingpart = ifelse(!is.null(vars), rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"), NaN),
+        smoothingpart = ifelse(
+            !is.null(vars),
+            rjd3toolkit::.proc_numeric(jrslt, "smoothingpart"),
+            NaN
+        ),
         parameter = rjd3toolkit::.proc_numeric(jrslt, "parameter"),
         eparameter = rjd3toolkit::.proc_numeric(jrslt, "eparameter"),
         residuals = .proc_residuals(jrslt, freqratio)
@@ -722,18 +906,28 @@ temporal_interpolation_raw <- function(
 #' indicator as the dependent variable and the unknown target series as the
 #' independent variable.
 #'
-#' @param series A low-frequency time series to be disaggregated or interpolated. It must be a `"ts"` object.
-#' @param indicator A high-frequency indicator series. It must be a `"ts"` object.
-#' @param conversion A character string specifying the conversion mode, typically `"Sum"`(the default) or `"Average"`. Other options are: `"Last"`, `"First"` and `"UserDefined"`.
-#' @param conversion.obsposition An integer specifying the position of the low-frequency observations within the interpolated series (e.g. the 7th month of the year).
-#' This argument is used only for interpolation when `conversion = "UserDefined"`.
-#' @param rho A numeric value giving the (initial) value of the autoregressive parameter.
-#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is fixed. The default is `FALSE`, which indicates that `rho` is estimated.
-#' @param rho.truncated A numeric value defining the lower bound of the admissible range for `rho`.
-#' The evaluation range is `[rho.truncated, 1[`.
+#' @param series A low-frequency time series to be disaggregated or
+#'   interpolated. It must be a `"ts"` object.
+#' @param indicator A high-frequency indicator series. It must be a `"ts"`
+#'   object.
+#' @param conversion A character string specifying the conversion mode,
+#'   typically `"Sum"`(the default) or `"Average"`. Other options are:
+#'   `"Last"`, `"First"` and `"UserDefined"`.
+#' @param conversion.obsposition An integer specifying the position of the
+#'   low-frequency observations within the interpolated series (e.g. the 7th
+#'   month of the year).
+#'   This argument is used only for interpolation when
+#'   `conversion = "UserDefined"`.
+#' @param rho A numeric value giving the (initial) value of the autoregressive
+#'   parameter.
+#' @param rho.fixed Boolean. Specifies whether the supplied value of `rho` is
+#'   fixed. The default is `FALSE`, which indicates that `rho` is estimated.
+#' @param rho.truncated A numeric value defining the lower bound of the
+#'   admissible range for `rho`.
+#'   The evaluation range is `[rho.truncated, 1[`.
 #'
-#' @return An object of class "JD3_TEMPDISAGGI_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_TEMPDISAGGI_RSLTS" is returned. The
+#' following are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients;
 #' * `estimation` `[[2]]` disaggregated Time-Series and parameter;
 #' * `likelihood` `[[3]]` likelihood statistics.
@@ -762,15 +956,32 @@ temporal_interpolation_raw <- function(
 #' td$regression$a
 #' td$regression$b
 #'
-temporaldisaggregationI <- function(series, indicator,
-                                    conversion = c("Sum", "Average", "Last", "First", "UserDefined"), conversion.obsposition = 1L,
-                                    rho = 0., rho.fixed = FALSE,  rho.truncated = 0.) {
+temporaldisaggregationI <- function(
+    series,
+    indicator,
+    conversion = c("Sum", "Average", "Last", "First", "UserDefined"),
+    conversion.obsposition = 1L,
+    rho = 0.,
+    rho.fixed = FALSE,
+    rho.truncated = 0.
+) {
     conversion <- match.arg(conversion)
     jseries <- rjd3toolkit::.r2jd_tsdata(series)
     jlist <- list()
     jindicator <- rjd3toolkit::.r2jd_tsdata(indicator)
-    jrslt <- .jcall("jdplus/benchmarking/base/r/TemporalDisaggregation", "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationIResults;",
-                    "processI", jseries, jindicator, "Ar1", conversion, as.integer(conversion.obsposition), rho, rho.fixed, rho.truncated)
+    jrslt <- .jcall(
+        "jdplus/benchmarking/base/r/TemporalDisaggregation",
+        "Ljdplus/benchmarking/base/core/univariate/TemporalDisaggregationIResults;",
+        "processI",
+        jseries,
+        jindicator,
+        "Ar1",
+        conversion,
+        as.integer(conversion.obsposition),
+        rho,
+        rho.fixed,
+        rho.truncated
+    )
     # Build the S3 result
     a <- rjd3toolkit::.proc_numeric(jrslt, "a")
     b <- rjd3toolkit::.proc_numeric(jrslt, "b")
@@ -796,8 +1007,6 @@ temporaldisaggregationI <- function(series, indicator,
 }
 
 
-
-
 #' @title Multivariate Temporal Disaggregaton of a System of Time Series by Regression Models.
 #'
 #' @description
@@ -805,41 +1014,81 @@ temporaldisaggregationI <- function(series, indicator,
 #' time series into higher frequency series, based on the multivariate
 #' extension of the Chow-Lin model or the Random Walk approach (Fernandez).
 #'
-#' @param series A named list of `ts` objects containing the low frequency time series to be disaggregated.
-#' @param constant Either a Boolean or a vector of Booleans. If a vector is provided, each element specifies whether a constant term is included in the model for each series, following the order in which they appear in the `series` object.
-#' The length of the the vector must match the number of series.
-#' If a single Boolean is provided (default if `TRUE`), it is applied to all series.
-#' Note that this argument is used only with Chow-Lin model (i.e., when `rhos` values are strictly less than 1). For further details, see the package vignette.
-#' @param trend Either a Boolean or a vector of Booleans. If a vector is provided, each element specifies whether a linear trend is included in the model for each series, following the order in which they appear in the `series` object.
-#' The length of the the vector must match the number of series.
-#' If a single Boolean is provided (default if `FALSE`), it is applied to all series.
-#' @param indicators a named list of `ts` objects or a named list of a list of `ts` objects. Each element represents one or more high-frequency indicator series associated with each series.
-#' If an element is `NULL`, no indicator is used for the corresponding series. The default value is `NULL`, meaning that no indicators are used for any series.
-#' @param ccseries A named list of `ts` objects containing the contemporaneous constraints. If `NULL` (the default), no contemporaneous constraints can be considered.
-#' @param ccdefinition A character vector defining each contemporaneous constraints. The elements of the vector must be written in the form \eqn{z=w_1 y_1+\ldots+w_n y_n} or \eqn{c=w_1 y_1+\ldots+w_n y_n} where:
-#' * \eqn{z} is the name of a contemporaneous constraint,
-#' * \eqn{(w_1,\ldots,w_n)} are optional numeric weights,
-#' * \eqn{(y_1,\ldots,y_n)} are the names of the time series and
-#' * \eqn{c} is a constant.
-#' The default is `NULL`, meaning that no contemporaneous constraint is considered.
-#' @param freq An integer giving the annual frequency of the disaggregated series.
-#' This argument is ignored when at least one indicator series is provided for any series.
-#' @param rhos Either a numeric value or a vector of numerics. If a vector is provided, each element specifies the value of the `rho` parameter associated to each series, following the order in which they appear in the `series` object.
-#' The length of the the vector must match the number of series.
-#' If a single numeric value is provided (default if `1`, corresponding to the Fernandez model), it is applied to all series.
-#' @param var A character string specifying the method used to estimate the variance-covariance matrix of the innovations.
-#' The default is `"fromUnivariate"`, meaning that is is estimated from the residuals of the univariate models. Others options include `"allEquals"`, which assume a diagonal matrix with identical variances (strong assumption), and `"userDefined"`, where the matrix is supplied by the user via the `var.matrix` argument. For additional details, see the package vignette.
-#' @param var.includeCov Boolean. Indicates whether non-diagonal elements of the innovation variance-covariance matrix may as well be estimated from the residuals of the univariate models. The default is `FALSE`, meaning that only a diagonal matrix is estimated.
-#' This argument is used only when `var = "fromUnivariate"`.
-#' @param var.shrinkCov Boolean. Indicates whether a shrinkage covariance estimator should be used. See the vignette for more details.
-#' This argument is used only when `var = "fromUnivariate"` and `var.includeCov = TRUE`.
+#' @param series A named list of `ts` objects containing the low frequency time
+#'   series to be disaggregated.
+#' @param constant Either a Boolean or a vector of Booleans. If a vector is
+#'   provided, each element specifies whether a constant term is included in
+#'   the model for each series, following the order in which they appear in the
+#'   `series` object.
+#'   The length of the the vector must match the number of series.
+#'   If a single Boolean is provided (default if `TRUE`), it is applied to all
+#'   series.
+#'   Note that this argument is used only with Chow-Lin model (i.e., when
+#'   `rhos` values are strictly less than 1). For further details, see the
+#'   package vignette.
+#' @param trend Either a Boolean or a vector of Booleans. If a vector is
+#'   provided, each element specifies whether a linear trend is included in the
+#'   model for each series, following the order in which they appear in the
+#'   `series` object.
+#'   The length of the the vector must match the number of series.
+#'   If a single Boolean is provided (default if `FALSE`), it is applied to all
+#'   series.
+#' @param indicators a named list of `ts` objects or a named list of a list of
+#'   `ts` objects. Each element represents one or more high-frequency indicator
+#'   series associated with each series.
+#'   If an element is `NULL`, no indicator is used for the corresponding
+#'   series. The default value is `NULL`, meaning that no indicators are used
+#'   for any series.
+#' @param ccseries A named list of `ts` objects containing the contemporaneous
+#'   constraints. If `NULL` (the default), no contemporaneous constraints can
+#'   be considered.
+#' @param ccdefinition A character vector defining each contemporaneous
+#'   constraints. The elements of the vector must be written in the form
+#'   \eqn{z=w_1 y_1+\ldots+w_n y_n} or \eqn{c=w_1 y_1+\ldots+w_n y_n} where:
+#'   * \eqn{z} is the name of a contemporaneous constraint,
+#'   * \eqn{(w_1,\ldots,w_n)} are optional numeric weights,
+#'   * \eqn{(y_1,\ldots,y_n)} are the names of the time series and
+#'   * \eqn{c} is a constant.
+#'   The default is `NULL`, meaning that no contemporaneous constraint is
+#'   considered.
+#' @param freq An integer giving the annual frequency of the disaggregated
+#'   series.
+#'   This argument is ignored when at least one indicator series is provided
+#'   for any series.
+#' @param rhos Either a numeric value or a vector of numerics. If a vector is
+#'   provided, each element specifies the value of the `rho` parameter
+#'   associated to each series, following the order in which they appear in the
+#'   `series` object.
+#'   The length of the the vector must match the number of series.
+#'   If a single numeric value is provided (default if `1`, corresponding to
+#'   the Fernandez model), it is applied to all series.
+#' @param var A character string specifying the method used to estimate the
+#'   variance-covariance matrix of the innovations.
+#'   The default is `"fromUnivariate"`, meaning that it is estimated from the
+#'   residuals of the univariate models. Others options include `"allEquals"`,
+#'   which assume a diagonal matrix with identical variances (a strong
+#'   assumption), and `"userDefined"`, where the matrix is supplied by the user
+#'   via the `var.matrix` argument. For additional details, see the package
+#'   vignette.
+#' @param var.includeCov Boolean. Indicates whether non-diagonal elements of
+#'   the innovation variance-covariance matrix may as well be estimated from
+#'   the residuals of the univariate models. The default is `FALSE`, meaning
+#'   that only a diagonal matrix is estimated.
+#'   This argument is used only when `var = "fromUnivariate"`.
+#' @param var.shrinkCov Boolean. Indicates whether a shrinkage covariance
+#'   estimator should be used. See the vignette for more details.
+#'   This argument is used only when `var = "fromUnivariate"` and
+#'   `var.includeCov = TRUE`.
 #' @param var.matrix The variance-covariance matrix of the innovations.
-#' This argument is used only when `var = "userDefined"` and must be provided in that case.
+#'   This argument is used only when `var = "userDefined"` and must be provided
+#'   in that case.
 #'
-#' @return An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The following are returned
-#' invisibly as a list:
+#' @return An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The
+#' following are returned invisibly as a list:
 #' * `regression` `[[1]]` regression coefficients for each series;
-#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation for each series, regression effects, smoothing part, parameter and variance-covariance matrix;
+#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation for
+#'   each series, regression effects, smoothing part, parameter and
+#'   variance-covariance matrix;
 #'
 #' @export
 #'
@@ -926,19 +1175,20 @@ temporaldisaggregationI <- function(series, indicator,
 #'
 #' do.call(cbind, rslt3$estimation$disagg)
 #'
-multivariatechowlin <- function(series,
-                                constant = TRUE,
-                                trend = FALSE,
-                                indicators = NULL,
-                                ccseries = NULL,
-                                ccdefinition = NULL,
-                                freq = 4L,
-                                rhos = 1,
-                                var = c("fromUnivariate", "allEquals", "userDefined"),
-                                var.includeCov = FALSE,
-                                var.shrinkCov = FALSE,
-                                var.matrix = NULL) {
-
+multivariatechowlin <- function(
+    series,
+    constant = TRUE,
+    trend = FALSE,
+    indicators = NULL,
+    ccseries = NULL,
+    ccdefinition = NULL,
+    freq = 4L,
+    rhos = 1,
+    var = c("fromUnivariate", "allEquals", "userDefined"),
+    var.includeCov = FALSE,
+    var.shrinkCov = FALSE,
+    var.matrix = NULL
+) {
     var <- match.arg(var)
 
     n <- length(series)
@@ -947,15 +1197,21 @@ multivariatechowlin <- function(series,
     same_size <- length(indicators) == n
     same_names <- setequal(snames, names(indicators))
     if (!are_lists || !same_size || !same_names) {
-        stop("The 'series' and 'indicators' arguments must be lists with matching size and names.")
+        stop(
+            "The 'series' and 'indicators' arguments must be lists with matching size and names."
+        )
     }
 
     # create the input
     jdic_series <- .jnew("jdplus/toolkit/base/r/util/Dictionary")
-    for (i in seq_along(series)){
-        .jcall(jdic_series, "V", "add",
-               snames[i],
-               rjd3toolkit::.r2jd_tsdata(series[[i]]))
+    for (i in seq_along(series)) {
+        .jcall(
+            jdic_series,
+            "V",
+            "add",
+            snames[i],
+            rjd3toolkit::.r2jd_tsdata(series[[i]])
+        )
     }
 
     ncst <- length(constant)
@@ -975,31 +1231,44 @@ multivariatechowlin <- function(series,
     jtrend <- .jarray(as.logical(trend), contents.class = "Z")
 
     jarrdic_indic <- .jnew("jdplus/benchmarking/base/r/util/DictionaryGroups")
-    for (i in seq_along(indicators)){
-        if(!is.list(indicators[[i]])) indicators[[i]] <- list(x = indicators[[i]])
+    for (i in seq_along(indicators)) {
+        if (!is.list(indicators[[i]]))
+            indicators[[i]] <- list(x = indicators[[i]])
 
-        for(j in seq_along(indicators[[i]])){
+        for (j in seq_along(indicators[[i]])) {
             indic <- indicators[[i]][[j]]
 
             if (stats::is.ts(indic)) {
-                .jcall(jarrdic_indic, "V", "add",
-                       names(indicators)[i],
-                       rjd3toolkit::.r2jd_tsdata(indic))
+                .jcall(
+                    jarrdic_indic,
+                    "V",
+                    "add",
+                    names(indicators)[i],
+                    rjd3toolkit::.r2jd_tsdata(indic)
+                )
             } else if (is.null(indic)) {
-                .jcall(jarrdic_indic, "V", "add",
-                       names(indicators)[i],
-                       .jnull("jdplus/toolkit/base/api/timeseries/TsData"))
+                .jcall(
+                    jarrdic_indic,
+                    "V",
+                    "add",
+                    names(indicators)[i],
+                    .jnull("jdplus/toolkit/base/api/timeseries/TsData")
+                )
             }
         }
     }
 
     if (!is.null(ccseries)) {
-        if(!is.list(ccseries)) stop("'ccseries' must be a list.")
+        if (!is.list(ccseries)) stop("'ccseries' must be a list.")
         jdic_ccseries <- .jnew("jdplus/toolkit/base/r/util/Dictionary")
         for (i in seq_along(ccseries)) {
-            .jcall(jdic_ccseries, "V", "add",
-                   names(ccseries)[i],
-                   rjd3toolkit::.r2jd_tsdata(ccseries[[i]]))
+            .jcall(
+                jdic_ccseries,
+                "V",
+                "add",
+                names(ccseries)[i],
+                rjd3toolkit::.r2jd_tsdata(ccseries[[i]])
+            )
         }
     } else {
         jdic_ccseries <- .jnull("jdplus/toolkit/base/r/util/Dictionary")
@@ -1008,7 +1277,10 @@ multivariatechowlin <- function(series,
     if (is.null(ccdefinition)) {
         jccdef <- .jnull("[Ljava/lang/String;")
     } else if (is.character(ccdefinition)) {
-        jccdef <- .jarray(as.character(ccdefinition), contents.class = "java/lang/String")
+        jccdef <- .jarray(
+            as.character(ccdefinition),
+            contents.class = "java/lang/String"
+        )
     } else {
         stop("'ccdefinition' must be NULL or a character vector.")
     }
@@ -1026,35 +1298,53 @@ multivariatechowlin <- function(series,
     jcst <- .jarray(as.logical(constant), contents.class = "Z")
 
     jvar_mat <- rjd3toolkit::.r2jd_matrix(var.matrix)
-    jrslt <- .jcall(obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
-                    returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
-                    method = "multiChowLin",
-                    jdic_series,
-                    jcst,
-                    jtrend,
-                    jarrdic_indic,
-                    jdic_ccseries,
-                    jccdef,
-                    as.integer(freq),
-                    jrhos,
-                    var,
-                    var.includeCov,
-                    var.shrinkCov,
-                    jvar_mat)
+    jrslt <- .jcall(
+        obj = "jdplus/benchmarking/base/r/TemporalDisaggregation",
+        returnSig = "Ljdplus/benchmarking/base/api/multivariate/MultivariateChowLinResults;",
+        method = "multiChowLin",
+        jdic_series,
+        jcst,
+        jtrend,
+        jarrdic_indic,
+        jdic_ccseries,
+        jccdef,
+        as.integer(freq),
+        jrhos,
+        var,
+        var.includeCov,
+        var.shrinkCov,
+        jvar_mat
+    )
 
-    .jd2r_lhmap <- function(result, method, key, key.class = c("String"), value.class = c("TsData", "Matrix", "DoubleSeq", "List<String>")) {
+    .jd2r_lhmap <- function(
+        result,
+        method,
+        key,
+        key.class = "String",
+        value.class = c("TsData", "Matrix", "DoubleSeq", "List<String>")
+    ) {
         key.class <- match.arg(key.class)
         value.class <- match.arg(value.class)
 
         jmap <- .jcall(result, "Ljava/util/Map;", method)
 
         jkey <- .jnew("java/lang/String", key)
-        jobject <- .jcall(jmap, "Ljava/lang/Object;", "get", .jcast(jkey, "java/lang/Object"))
+        jobject <- .jcall(
+            jmap,
+            "Ljava/lang/Object;",
+            "get",
+            .jcast(jkey, "java/lang/Object")
+        )
 
-        if(is.null(jobject)) return(NULL)
+        if (is.null(jobject)) {
+            return(NULL)
+        }
 
         if (value.class == "TsData") {
-            out <- rjd3toolkit::.jd2r_tsdata(.jcast(jobject, "jdplus/toolkit/base/api/timeseries/TsData"))
+            out <- rjd3toolkit::.jd2r_tsdata(.jcast(
+                jobject,
+                "jdplus/toolkit/base/api/timeseries/TsData"
+            ))
         } else if (value.class == "Matrix") {
             out <- rjd3toolkit::.jd2r_matrix(jobject)
         } else if (value.class == "DoubleSeq") {
@@ -1071,38 +1361,52 @@ multivariatechowlin <- function(series,
 
     for (i in seq_along(series)) {
         sname <- snames[i]
-        disagg[[sname]] <- .jd2r_lhmap(jrslt,
-                                       "getDisaggregatedSeries",
-                                       sname,
-                                       value.class = "TsData")
-        edisagg[[sname]] <- .jd2r_lhmap(jrslt,
-                                        "getStdevDisaggregatedSeries",
-                                        sname,
-                                        value.class = "TsData")
-        regeffect[[sname]] <- .jd2r_lhmap(jrslt,
-                                          "getRegressionEffects",
-                                          sname,
-                                          value.class = "TsData")
-        reg[[sname]] <- .jd2r_lhmap(jrslt,
-                                    "getRegressors",
-                                    sname,
-                                    value.class = "Matrix")
-        coef <- .jd2r_lhmap(jrslt,
-                            "getCoefficients",
-                            sname,
-                            value.class = "DoubleSeq")
+        disagg[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getDisaggregatedSeries",
+            sname,
+            value.class = "TsData"
+        )
+        edisagg[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getStdevDisaggregatedSeries",
+            sname,
+            value.class = "TsData"
+        )
+        regeffect[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getRegressionEffects",
+            sname,
+            value.class = "TsData"
+        )
+        reg[[sname]] <- .jd2r_lhmap(
+            jrslt,
+            "getRegressors",
+            sname,
+            value.class = "Matrix"
+        )
+        coef <- .jd2r_lhmap(
+            jrslt,
+            "getCoefficients",
+            sname,
+            value.class = "DoubleSeq"
+        )
 
-        coef_var <- .jd2r_lhmap(jrslt,
-                                "getCoefficientsVariance",
-                                sname,
-                                value.class = "DoubleSeq")
+        coef_var <- .jd2r_lhmap(
+            jrslt,
+            "getCoefficientsVariance",
+            sname,
+            value.class = "DoubleSeq"
+        )
 
-        reg_names <- .jd2r_lhmap(jrslt,
-                                 "getRegressorsNames",
-                                 sname,
-                                 value.class = "List<String>")
+        reg_names <- .jd2r_lhmap(
+            jrslt,
+            "getRegressorsNames",
+            sname,
+            value.class = "List<String>"
+        )
 
-        if(!is.null(coef)) {
+        if (!is.null(coef)) {
             se <- sqrt(coef_var)
             t <- coef / se
             model[[sname]] <- data.frame(coef, se, t, row.names = reg_names)
@@ -1115,13 +1419,15 @@ multivariatechowlin <- function(series,
         model = model
     )
 
+    smoothingpart <- jrslt |>
+        rjd3toolkit::.jd3_object(subclasses = "MTD", result = TRUE) |>
+        rjd3toolkit::result("smoothingpart")
+
     estimation <- list(
         disagg = disagg,
         # edisagg = edisagg,
         regeffect = regeffect,
-        smoothingpart =
-            rjd3toolkit::.jd3_object(jrslt,"MTD", TRUE) |>
-            rjd3toolkit::result("smoothingpart"),
+        smoothingpart = smoothingpart,
         parameters = rhos,
         # residuals -> TODO
         vcov = rjd3toolkit::.proc_matrix(jrslt, "innovationsvarcov")
