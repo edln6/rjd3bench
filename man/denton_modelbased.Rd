@@ -15,16 +15,23 @@ denton_modelbased(
 )
 }
 \arguments{
-\item{series}{A low-frequency time series to be disaggregated or interpolated. It must be either a \code{"ts"} object or a numeric vector.}
+\item{series}{A low-frequency time series to be disaggregated or
+interpolated. It must be either a \code{"ts"} object or a numeric vector.}
 
-\item{indicator}{A high-frequency indicator series. It must be of the same class as \code{series}.}
+\item{indicator}{A high-frequency indicator series. It must be of the same
+class as \code{series}.}
 
-\item{differencing}{Not yet implemented. This should be left equal to \code{1} (corresponding to the Denton PFD method).}
+\item{differencing}{Not yet implemented. This should be left equal to \code{1}
+(corresponding to the Denton PFD method).}
 
-\item{conversion}{A character string specifying the conversion mode, typically \code{"Sum"} (the default) or \code{"Average"}. Other options are: \code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
+\item{conversion}{A character string specifying the conversion mode,
+typically \code{"Sum"} (the default) or \code{"Average"}. Other options are:
+\code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
 
-\item{conversion.obsposition}{An integer specifying the position of the low-frequency observations within the interpolated series (e.g. the 7th month of the year).
-This argument is used only for interpolation when \code{conversion = "UserDefined"}.}
+\item{conversion.obsposition}{An integer specifying the position of the
+low-frequency observations within the interpolated series (e.g. the 7th
+month of the year). This argument is used only for interpolation when
+\code{conversion = "UserDefined"}.}
 
 \item{outliers}{A list specifying the outlier periods and their magnitude.
 Each element must be provided as \code{"YYYY-MM-DD" = value}, where the date
@@ -38,7 +45,8 @@ provided as \code{"YYYY-MM-DD" = value}, where the date identifies the period
 and the numeric value specifies the fixed BI ratio.}
 }
 \value{
-An object of class "JD3_MBDENTON_RSLTS" is returned. The following are returned invisibly as a list:
+An object of class "JD3_MBDENTON_RSLTS" is returned. The following
+are returned as a list:
 \itemize{
 \item \code{estimation} \verb{[[1]]} disaggregated Time-Series, BI ratios and standard deviations;
 \item \code{likelihood} \verb{[[2]]} likelihood statistics.

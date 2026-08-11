@@ -43,7 +43,7 @@ The evaluation range is \verb{[rho.truncated, 1[}.}
 }
 \value{
 An object of class "JD3_TEMPDISAGGI_RSLTS" is returned. The
-following are returned invisibly as a list:
+following are returned as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients;
 \item \code{estimation} \verb{[[2]]} disaggregated Time-Series and parameter;

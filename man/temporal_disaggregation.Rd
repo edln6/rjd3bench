@@ -82,7 +82,7 @@ This argument is ignored when one or more indicator series is provided.}
 }
 \value{
 An object of class "JD3_TEMPDISAGG_RSLTS" is returned. The following
-are returned invisibly as a list:
+are returned as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients;
 \item \code{estimation} \verb{[[2]]} disaggregated Time-Series and standard deviation,

@@ -18,18 +18,22 @@ NULL
 #' @param calendarobs A named list containing the observed data. The list must
 #'   consist of three elements: `start`, `end` and `value`, where the first two
 #'   indicate the starting and ending dates of the observation. See the example.
-#' @param freq An integer specifying the annual frequency. If set to `0`, only the daily series is computed.
-#' @param start The starting day of the calendarization. This date may precede the first observed data (retropolation).
-#' @param end The ending day of the calendarization. This date may exceed the last observed data (extrapolation).
+#' @param freq An integer specifying the annual frequency. If set to `0`, only
+#'   the daily series is computed.
+#' @param start The starting day of the calendarization. This date may precede
+#'   the first observed data (retropolation).
+#' @param end The ending day of the calendarization. This date may exceed the
+#'   last observed data (extrapolation).
 #' @param dailyweights A numeric vector of daily indicator values (or weights).
 #'   The vector must have the same length as the requested daily series. When
 #'   available, these weights typically reflects daily levels of activity, which
 #'   may vary due to seasonality, trading day effects, or other calendar effects
 #'   such as public holidays.
-#' @param stde Boolean. If `TRUE`, the function also returns the standard errors associated with the results.
-#' The default is `FALSE`.
+#' @param stde Boolean. If `TRUE`, the function also returns the standard errors
+#'   associated with the results. The default is `FALSE`.
 #'
-#' @return A list containing the disaggregated daily values, the final aggregated series, and their associated standard errors if requested.
+#' @return A list containing the disaggregated daily values, the final
+#'   aggregated series, and their associated standard errors if requested.
 #'
 #' @references  Quenneville, B., Picard F., Fortier S. (2012). Calendarization
 #'   with interpolating splines and state space models. Statistics Canada, Appl.

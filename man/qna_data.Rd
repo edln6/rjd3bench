@@ -29,7 +29,7 @@ A named list with two elements:
 Belgian Quarterly National Accounts
 }
 \usage{
-data(qna_data)
+qna_data
 }
 \description{
 This dataset contains two data frames used for temporal disaggregation and
