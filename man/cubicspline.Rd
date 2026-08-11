@@ -13,16 +13,23 @@ cubicspline(
 )
 }
 \arguments{
-\item{s}{A preliminary series. If not \code{NULL}, it must be of the same class as \code{t}.}
+\item{s}{A preliminary series. If not \code{NULL}, it must be of the same class
+as \code{t}.}
 
-\item{t}{The low-frequency aggregation constraint. It must be either an object of class \code{ts} or a numeric vector.}
+\item{t}{The low-frequency aggregation constraint. It must be either an
+object of class \code{ts} or a numeric vector.}
 
-\item{nfreq}{An integer giving the annual frequency of the benchmarked series.
+\item{nfreq}{An integer giving the annual frequency of the benchmarked
+series.
 This argument is used only when no preliminary series is provided.}
 
-\item{conversion}{A character string specifying the conversion mode, typically \code{"Sum"} (the default) or \code{"Average"}. Other options are: \code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
+\item{conversion}{A character string specifying the conversion mode,
+typically \code{"Sum"} (the default) or \code{"Average"}. Other options are:
+\code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
 
-\item{obsposition}{An integer specifying the position of the observations of the low-frequency constraint within the benchmarked series (e.g. the 7th month of the year).
+\item{obsposition}{An integer specifying the position of the observations of
+the low-frequency constraint within the benchmarked series (e.g. the 7th
+month of the year).
 This argument is used only when \code{conversion = "UserDefined"}.}
 }
 \value{

@@ -20,18 +20,26 @@ grp(
 
 \item{t}{The low-frequency aggregation constraint. It must be a \code{"ts"} object.}
 
-\item{objective}{A character string specifying the objective function. The default is \code{"Forward"}. Other options are: \code{"Backward"}, \code{"Symmetric"} and \code{"Log"}. For additional information on this, see the package vignette.}
+\item{objective}{A character string specifying the objective function. The
+default is \code{"Forward"}. Other options are: \code{"Backward"}, \code{"Symmetric"} and
+\code{"Log"}. For additional information on this, see the package vignette.}
 
-\item{conversion}{A character string specifying the conversion mode, typically \code{"Sum"} (the default) or \code{"Average"}. Other options are: \code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
+\item{conversion}{A character string specifying the conversion mode,
+typically \code{"Sum"} (the default) or \code{"Average"}. Other options are:
+\code{"Last"}, \code{"First"} and \code{"UserDefined"}.}
 
-\item{obsposition}{An integer specifying the position of the observations of the low-frequency constraint within the benchmarked series (e.g. the 7th month of the year).
+\item{obsposition}{An integer specifying the position of the observations
+of the low-frequency constraint within the benchmarked series (e.g. the
+7th month of the year).
 This argument is used only when \code{conversion = "UserDefined"}.}
 
 \item{eps}{A numeric value specifying the convergence tolerance. The BFGS
 algorithm proceeds until the reduction in the objective function is within
-this tolerance (default is \code{1e-12}) or until the maximum number of iterations is reached.}
+this tolerance (default is \code{1e-12}) or until the maximum number of
+iterations is reached.}
 
-\item{iter}{An integer giving the maximum number of iterations allowed in the BFGS algorithm.
+\item{iter}{An integer giving the maximum number of iterations allowed in
+the BFGS algorithm.
 The default is \code{500}.}
 
 \item{dentoninitialization}{Boolean. Indicates whether the series obtained
