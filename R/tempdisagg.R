@@ -828,7 +828,7 @@ temporaldisaggregationI <- function(series, indicator,
 #' The length of the the vector must match the number of series.
 #' If a single numeric value is provided (default if `1`, corresponding to the Fernandez model), it is applied to all series.
 #' @param var A character string specifying the method used to estimate the variance-covariance matrix of the innovations.
-#' The default is `"fromUnivariate"`, meaning that is is estimated from the residuals of the univariate models. Others options include `"allEquals"`, which assume a diagonal matrix with identical variances (a strong assumption), and `"userDefined"`, where the matrix is supplied by the user via the `var.matrix` argument. For additional details, see the package vignette.
+#' The default is `"fromUnivariate"`, meaning that is is estimated from the residuals of the univariate models. Others options include `"allEquals"`, which assume a diagonal matrix with identical variances (strong assumption), and `"userDefined"`, where the matrix is supplied by the user via the `var.matrix` argument. For additional details, see the package vignette.
 #' @param var.includeCov Boolean. Indicates whether non-diagonal elements of the innovation variance-covariance matrix may as well be estimated from the residuals of the univariate models. The default is `FALSE`, meaning that only a diagonal matrix is estimated.
 #' This argument is used only when `var = "fromUnivariate"`.
 #' @param var.shrinkCov Boolean. Indicates whether a shrinkage covariance estimator should be used. See the vignette for more details.
@@ -873,7 +873,7 @@ temporaldisaggregationI <- function(series, indicator,
 #'
 #' # Estimate models and get results
 #'
-#' ## Mix Chow-Lin - Fernandez, assuming no covariance in the innovations
+#' ## Mix Chow-Lin - Fernandez, assuming a diagonal variance-covariance matrix of the innovations
 #' rslt1 <- multivariatechowlin(series = lf_series,
 #'                              constant = c(FALSE, FALSE, TRUE),
 #'                              trend = c(FALSE, FALSE, FALSE),
