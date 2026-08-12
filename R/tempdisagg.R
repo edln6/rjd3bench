@@ -53,7 +53,7 @@ NULL
 #' This argument is ignored when one or more indicator series is provided.
 #'
 #' @return An object of class "JD3_TEMPDISAGG_RSLTS" is returned. The following
-#' are returned invisibly as a list:
+#' are returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
 #' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation,
 #'   regression effects, smoothing part, parameter and residuals;
@@ -270,7 +270,7 @@ temporal_disaggregation <- function(
 #' This argument is ignored when one or more indicator series is provided.
 #'
 #' @return An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The
-#' following are returned invisibly as a list:
+#' following are returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
 #' * `estimation` `[[2]]` disaggregated values and standard deviation,
 #'   regression effects, smoothing part, parameter and residuals;
@@ -492,7 +492,7 @@ temporal_disaggregation_raw <- function(
 #' This argument is ignored when one or more indicator series is provided.
 #'
 #' @return An object of class "JD3_INTERP_RSLTS" is returned. The following are
-#' returned invisibly as a list:
+#' returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
 #' * `estimation` `[[2]]` interpolated Time-Series and standard deviation,
 #'   regression effects and smoothing part, parameter and residuals;
@@ -717,7 +717,7 @@ temporal_interpolation <- function(
 #' This argument is ignored when one or more indicator series is provided.
 #'
 #' @return An object of class "JD3_INTERPRAW_RSLTS" is returned. The following
-#' are returned invisibly as a list:
+#' are returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
 #' * `estimation` `[[2]]` interpolated values and standard deviation,
 #'   regression effects, smoothing part, parameter and residuals;
@@ -927,7 +927,7 @@ temporal_interpolation_raw <- function(
 #'   The evaluation range is `[rho.truncated, 1[`.
 #'
 #' @return An object of class "JD3_TEMPDISAGGI_RSLTS" is returned. The
-#' following are returned invisibly as a list:
+#' following are returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
 #' * `estimation` `[[2]]` disaggregated Time-Series and parameter;
 #' * `likelihood` `[[3]]` likelihood statistics.
@@ -1063,8 +1063,8 @@ temporaldisaggregationI <- function(
 #'   If a single numeric value is provided (default if `1`, corresponding to
 #'   the Fernandez model), it is applied to all series.
 #' @param var A character string specifying the method used to estimate the
-#'   variance-covariance matrix of the innovations.
-#'   The default is `"fromUnivariate"`, meaning that is is estimated from the
+#'   variance-covariance matrix of the innovations. The default is
+#'   `"fromUnivariate"`, meaning that it is estimated empirically from the
 #'   residuals of the univariate models. Others options include `"allEquals"`,
 #'   which assume a diagonal matrix with identical variances (a strong
 #'   assumption), and `"userDefined"`, where the matrix is supplied by the user
@@ -1084,7 +1084,7 @@ temporaldisaggregationI <- function(
 #'   in that case.
 #'
 #' @return An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The
-#' following are returned invisibly as a list:
+#' following are returned as a list:
 #' * `regression` `[[1]]` regression coefficients for each series;
 #' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation for
 #'   each series, regression effects, smoothing part, parameter and
@@ -1100,80 +1100,95 @@ temporaldisaggregationI <- function(
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Low-frequency data
-#' Y1 <- ts(c(30.0, 30.6, 31.2, 31.6), frequency = 1, start = c(2010,1))
-#' Y2 <- ts(c(80.0, 81.2, 82.5, 82.6), frequency = 1, start = c(2010,1))
-#' Y3 <- ts(c(8.0, 8.1, 8.2, 8.2), frequency = 1, start = c(2010,1))
+#' Y1 <- ts(c(30.0, 30.6, 31.2, 31.6), frequency = 1, start = c(2010, 1))
+#' Y2 <- ts(c(80.0, 81.2, 82.5, 82.6), frequency = 1, start = c(2010, 1))
+#' Y3 <- ts(c(8.0, 8.1, 8.2, 8.2), frequency = 1, start = c(2010, 1))
 #' lf_series <- list(y1 = Y1, y2 = Y2, y3 = Y3)
 #'
 #' # Contemporaneous constraint
-#' z <- ts(c(27.1,29.8,29.9,31.2,29.4,27.9,30.9,31.7,29.2,30.2,30.6,31.9,29.3,30.4,30.7,32.0), frequency = 4, start = c(2010,1))
+#' z <- ts(c(27.1, 29.8, 29.9, 31.2, 29.4, 27.9, 30.9, 31.7, 29.2, 30.2, 30.6, 31.9, 29.3, 30.4, 30.7, 32.0),
+#'         frequency = 4,
+#'         start = c(2010, 1))
 #'
 #' # High-frequency indicators
-#' x11 <- ts(c(7,7.2,8.1,7.5,8.5,7.8,8.1,8.4,8.6,7.8,8.0,8.3,8.7,7.9,8.0,8.6), frequency=4, start=c(2010,1))
-#' x12 <- ts(c(18,19.5,19.0,19.7,18.5,19.0,20.3,20.0,18.6,19.5,20.4,20.1,18.7,19.1,20.4,20.8), frequency = 4, start = c(2010,1))
+#' x11 <- ts(c(7.0, 7.2, 8.1, 7.5, 8.5, 7.8, 8.1, 8.4, 8.6, 7.8, 8.0, 8.3, 8.7, 7.9, 8.0, 8.6),
+#'           frequency = 4,
+#'           start=c(2010, 1))
+#' x12 <- ts(c(18.0, 19.5, 19.0, 19.7, 18.5, 19.0, 20.3, 20.0, 18.6, 19.5, 20.4, 20.1, 18.7, 19.1, 20.4, 20.8),
+#'           frequency = 4,
+#'           start = c(2010, 1))
 #' x2 <- NULL
-#' x3 <- ts(c(1.5,1.8,2,2.5,2.0,1.5,1.7,2.1,2.1,1.6,1.6,2.2,2.3,1.7,1.9,2.3), frequency = 4, start = c(2010,1))
-#' indic_series = list(y1 = list(x11, x12),
-#'                     y2 = NULL,
-#'                     y3 = x3)
+#' x3 <- ts(c(1.5, 1.8, 2.0, 2.5, 2.0, 1.5, 1.7, 2.1, 2.1, 1.6, 1.6, 2.2, 2.3, 1.7, 1.9, 2.3),
+#'          frequency = 4,
+#'          start = c(2010, 1))
+#' indic_series <- list(y1 = list(x11, x12),
+#'                      y2 = NULL,
+#'                      y3 = x3)
 #'
 #' # Check consistency between temporal and contemporaneous constraints
-#' rowSums(cbind(Y1,Y2,Y3)) - stats::aggregate.ts(z) # ok!
+#' rowSums(cbind(Y1,Y2,Y3)) - stats::aggregate.ts(z) # should all be 0
 #'
 #' # Estimate models and get results
 #'
-#' ## Mix Chow-Lin - Fernandez, assuming no covariance in the innovations
-#' rslt1 <- multivariatechowlin(series = lf_series,
-#'                              constant = c(FALSE, FALSE, TRUE),
-#'                              trend = c(FALSE, FALSE, FALSE),
-#'                              indicators = indic_series,
-#'                              ccseries = list(z = z),
-#'                              ccdefinition = "z=y1+y2+y3",
-#'                              freq = 4L,
-#'                              rhos = c(0.85, 1.0, 0.9),
-#'                              var = "fromUnivariate",
-#'                              var.includeCov = FALSE,
-#'                              var.shrinkCov = FALSE,
-#'                              var.matrix = NULL)
+#' ## Mix Chow-Lin and Fernandez definitions
 #'
-#' do.call(cbind, rslt1$estimation$disagg) # disaggregated series
+#' ### with var-cov matrix estimated from the univariate models, assuming zero covariances
+#' mtd1 <- multivariatechowlin(series = lf_series,
+#'                             constant = c(FALSE, FALSE, TRUE),
+#'                             trend = c(FALSE, FALSE, FALSE),
+#'                             indicators = indic_series,
+#'                             ccseries = list(z = z),
+#'                             ccdefinition = "z=y1+y2+y3",
+#'                             freq = 4L,
+#'                             rhos = c(0.85, 1.0, 0.9),
+#'                             var = "fromUnivariate",
+#'                             var.includeCov = FALSE,
+#'                             var.shrinkCov = FALSE,
+#'                             var.matrix = NULL)
 #'
-#' ## Mix Chow-Lin - Fernandez, using a shrinkage covariance estimator for the innovations
-#' rslt2 <- multivariatechowlin(series = lf_series,
-#'                              constant = c(FALSE, FALSE, TRUE),
-#'                              trend = c(FALSE, FALSE, FALSE),
-#'                              indicators = indic_series,
-#'                              ccseries = list(z = z),
-#'                              ccdefinition = "z=y1+y2+y3",
-#'                              freq = 4L,
-#'                              rhos = c(0.85, 1.0, 0.9),
-#'                              var = "fromUnivariate",
-#'                              var.includeCov = TRUE,
-#'                              var.shrinkCov = TRUE,
-#'                              var.matrix = NULL)
+#' mtd1$estimation$vcov # variance-covariance matrix of the innovations
+#' do.call(cbind, mtd1$estimation$disagg) # disaggregated series
 #'
-#' rslt2$estimation$vcov # variance-covariance matrix of the innovations
-#' do.call(cbind, rslt2$estimation$disagg)
+#' ### with var-cov matrix estimated from the univariate models, using a shrinkage estimator for the covariance
+#' mtd2 <- multivariatechowlin(series = lf_series,
+#'                             constant = c(FALSE, FALSE, TRUE),
+#'                             trend = c(FALSE, FALSE, FALSE),
+#'                             indicators = indic_series,
+#'                             ccseries = list(z = z),
+#'                             ccdefinition = "z=y1+y2+y3",
+#'                             freq = 4L,
+#'                             rhos = c(0.85, 1.0, 0.9),
+#'                             var = "fromUnivariate",
+#'                             var.includeCov = TRUE,
+#'                             var.shrinkCov = TRUE,
+#'                             var.matrix = NULL)
 #'
-#' ## Fernandez only (Random walk model) with user-defined variance-covariance matrix
-#' rslt3 <- multivariatechowlin(series = lf_series,
-#'                              constant = FALSE,
-#'                              trend = FALSE,
-#'                              indicators = indic_series,
-#'                              ccseries = list(z = z),
-#'                              ccdefinition = "z=y1+y2+y3",
-#'                              freq = 4L,
-#'                              rhos = 1.0,
-#'                              var = "userDefined",
-#'                              var.matrix = matrix(
+#' mtd2$estimation$vcov
+#' do.call(cbind, mtd2$estimation$disagg)
+#'
+#' ## Multivariate random walk model (multivariate Fernandez)
+#'
+#' ### with var-cov matrix provided by the user
+#' mtd3 <- multivariatechowlin(series = lf_series,
+#'                             constant = FALSE,
+#'                             trend = FALSE,
+#'                             indicators = indic_series,
+#'                             ccseries = list(z = z),
+#'                             ccdefinition = "z=y1+y2+y3",
+#'                             freq = 4L,
+#'                             rhos = 1.0,
+#'                             var = "userDefined",
+#'                             var.matrix = matrix(
 #'                                 c(0.005, 0.002, 0.001,
-#'                                   0.002, 0.010, 0.002,
-#'                                   0.001, 0.002, 0.003),
+#'                                 0.002, 0.010, 0.002,
+#'                                 0.001, 0.002, 0.003),
 #'                                 nrow = 3,
-#'                                 byrow = TRUE)
-#'                              )
+#'                                 byrow = TRUE
+#'                             )
+#' )
 #'
-#' do.call(cbind, rslt3$estimation$disagg)
+#' mtd3$estimation$vcov
+#' do.call(cbind, mtd3$estimation$disagg)
 #'
 multivariatechowlin <- function(
     series,

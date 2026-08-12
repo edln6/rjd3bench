@@ -18,11 +18,14 @@ calendarization(
 consist of three elements: \code{start}, \code{end} and \code{value}, where the first two
 indicate the starting and ending dates of the observation. See the example.}
 
-\item{freq}{An integer specifying the annual frequency. If set to \code{0}, only the daily series is computed.}
+\item{freq}{An integer specifying the annual frequency. If set to \code{0}, only
+the daily series is computed.}
 
-\item{start}{The starting day of the calendarization. This date may precede the first observed data (retropolation).}
+\item{start}{The starting day of the calendarization. This date may precede
+the first observed data (retropolation).}
 
-\item{end}{The ending day of the calendarization. This date may exceed the last observed data (extrapolation).}
+\item{end}{The ending day of the calendarization. This date may exceed the
+last observed data (extrapolation).}
 
 \item{dailyweights}{A numeric vector of daily indicator values (or weights).
 The vector must have the same length as the requested daily series. When
@@ -30,11 +33,12 @@ available, these weights typically reflects daily levels of activity, which
 may vary due to seasonality, trading day effects, or other calendar effects
 such as public holidays.}
 
-\item{stde}{Boolean. If \code{TRUE}, the function also returns the standard errors associated with the results.
-The default is \code{FALSE}.}
+\item{stde}{Boolean. If \code{TRUE}, the function also returns the standard errors
+associated with the results. The default is \code{FALSE}.}
 }
 \value{
-A list containing the disaggregated daily values, the final aggregated series, and their associated standard errors if requested.
+A list containing the disaggregated daily values, the final
+aggregated series, and their associated standard errors if requested.
 }
 \description{
 Time series data do not always coincide with calendar periods (e.g., fiscal

@@ -13,12 +13,19 @@ NULL
 #' constrained (or 'frozen') at specific periods or prior to a given date by
 #' fixing the corresponding high‑frequency BI ratios.
 #'
-#' @param series A low-frequency time series to be disaggregated or interpolated. It must be either a `"ts"` object or a numeric vector.
-#' @param indicator A high-frequency indicator series. It must be of the same class as `series`.
-#' @param differencing Not yet implemented. This should be left equal to `1` (corresponding to the Denton PFD method).
-#' @param conversion A character string specifying the conversion mode, typically `"Sum"` (the default) or `"Average"`. Other options are: `"Last"`, `"First"` and `"UserDefined"`.
-#' @param conversion.obsposition An integer specifying the position of the low-frequency observations within the interpolated series (e.g. the 7th month of the year).
-#' This argument is used only for interpolation when `conversion = "UserDefined"`.
+#' @param series A low-frequency time series to be disaggregated or
+#'   interpolated. It must be either a `"ts"` object or a numeric vector.
+#' @param indicator A high-frequency indicator series. It must be of the same
+#'   class as `series`.
+#' @param differencing Not yet implemented. This should be left equal to `1`
+#'   (corresponding to the Denton PFD method).
+#' @param conversion A character string specifying the conversion mode,
+#'   typically `"Sum"` (the default) or `"Average"`. Other options are:
+#'   `"Last"`, `"First"` and `"UserDefined"`.
+#' @param conversion.obsposition An integer specifying the position of the
+#'   low-frequency observations within the interpolated series (e.g. the 7th
+#'   month of the year). This argument is used only for interpolation when
+#'   `conversion = "UserDefined"`.
 #' @param outliers A list specifying the outlier periods and their magnitude.
 #'   Each element must be provided as `"YYYY-MM-DD" = value`, where the date
 #'   identifies the period. The numeric value specifies the intensity of the
@@ -29,7 +36,8 @@ NULL
 #'   provided as `"YYYY-MM-DD" = value`, where the date identifies the period
 #'   and the numeric value specifies the fixed BI ratio.
 #'
-#' @return An object of class "JD3_MBDENTON_RSLTS" is returned. The following are returned invisibly as a list:
+#' @return An object of class "JD3_MBDENTON_RSLTS" is returned. The following
+#'   are returned as a list:
 #' * `estimation` `[[1]]` disaggregated Time-Series, BI ratios and standard deviations;
 #' * `likelihood` `[[2]]` likelihood statistics.
 #'

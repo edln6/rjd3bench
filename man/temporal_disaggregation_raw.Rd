@@ -88,7 +88,7 @@ This argument is ignored when one or more indicator series is provided.}
 }
 \value{
 An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The
-following are returned invisibly as a list:
+following are returned as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients;
 \item \code{estimation} \verb{[[2]]} disaggregated values and standard deviation,

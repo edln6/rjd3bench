@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The package `rjd3bench` provides a variety of methods for temporal disaggregation, interpolation, benchmarking, reconciliation and calendarization, using highly efficient algorithms.
+The package `rjd3bench` provides a variety of methods for temporal disaggregation & interpolation, benchmarking, reconciliation & multivariate temporal disaggregation and calendarization, using highly efficient algorithms.
 
 Temporal disaggregation & interpolation:
 
@@ -48,8 +48,11 @@ Benchmarking:
 Reconciliation and multivariate temporal disaggregation:
 
 - Multivariate Cholette
+- Multivariate Chow-Lin and Fernandez
 
 Calendarization  
+
+- Calendarization with Denton
 
 
 ## Installation

@@ -6,7 +6,7 @@
 \alias{rjd3bench-package}
 \title{rjd3bench: Temporal Disaggregation and Benchmarking in 'JDemetra+' 3.x}
 \description{
-\if{html}{\figure{logo.svg}{options: style='float: right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
 Interface to 'JDemetra+' 3.x (\url{https://github.com/jdemetra}) time series analysis software. It provides a variety of methods for temporal disaggregation & interpolation, benchmarking, reconciliation and calendarization. It incorporates statistical methods described in the latest European Statistical System (ESS) guidelines on temporal disaggregation, benchmarking, and reconciliation (2018 edition). The package implements highly efficient algorithms for fast and reliable computation.
 }
@@ -24,7 +24,6 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Corentin Lemasson \email{corentin.lemasson@nbb.be}
   \item Jean Palate \email{palatejean@gmail.com}
 }
 
