@@ -146,7 +146,7 @@ indic_series = list(y1 = list(x11, x12),
                     y3 = x3)
 
 # Check consistency between temporal and contemporaneous constraints
-rowSums(cbind(Y1,Y2,Y3)) - stats::aggregate.ts(z) # ok!
+rowSums(cbind(Y1,Y2,Y3)) - stats::aggregate.ts(z) # should all be 0
 
 # Estimate models and get results
 
@@ -200,8 +200,8 @@ mtd3 <- multivariatechowlin(series = lf_series,
                             var = "userDefined",
                             var.matrix = matrix(
                                 c(0.005, 0.002, 0.001,
-                                  0.002, 0.010, 0.002,
-                                  0.001, 0.002, 0.003),
+                                0.002, 0.010, 0.002,
+                                0.001, 0.002, 0.003),
                                 nrow = 3,
                                 byrow = TRUE
                             )
