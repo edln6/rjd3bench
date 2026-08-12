@@ -44,6 +44,19 @@ the low-frequency constraint but the Benchmark-to-Indicator (BI ratio) is the
 one being smoothed. Sub-period estimates are then simply the product between
 the smoothed high frequency BI ratio and the preliminary series.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 data("qna_data")
@@ -60,9 +73,4 @@ cubicspline(s = x1, t = Y)
 x2 <- ts(qna_data$TURN_Q_data[,"TURN_INDEX_FF"], frequency = 4, start = c(2009,1))
 cubicspline(s = x2, t = Y)
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

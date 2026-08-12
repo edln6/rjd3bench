@@ -2,7 +2,7 @@
 % Please edit documentation in R/tempdisagg.R
 \name{temporal_interpolation_raw}
 \alias{temporal_interpolation_raw}
-\title{Interpolation of an Atypical Frequency Series by Regression Models.}
+\title{Interpolation of an Atypical Frequency Series by Regression Models}
 \usage{
 temporal_interpolation_raw(
   series,
@@ -107,6 +107,19 @@ Litterman and some variants of those algorithms. The
 \code{temporal_interpolation_raw()} function extends \code{temporal_interpolation()} by
 allowing temporal interpolation for any frequency ratio.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Use of Chow-lin method to interpolate a biennial series with an annual
@@ -144,8 +157,4 @@ ti4$estimation$interp
 }
 \seealso{
 \code{temporal_disaggregation_raw()}
-
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

@@ -58,6 +58,19 @@ pro-rating method, emerge as particular cases of the Cholette method.
 This method has been widely used for the purpose of benchmarking seasonally
 adjusted series among others.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 ym_true <- rjd3toolkit::Retail$RetailSalesTotal
@@ -92,9 +105,4 @@ Quenneville, B., Fortier S., Chen Z.-G., Latendresse E. (2006).
 Recent Developments in Benchmarking to Annual Totals in X12-ARIMA and at
 Statistics Canada. Statistics Canada, Working paper of the Time Series
 Research and Analysis Centre.
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

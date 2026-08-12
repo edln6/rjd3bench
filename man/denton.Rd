@@ -64,6 +64,19 @@ additive first difference (AFD), proportional first difference (PFD),
 additive second difference (ASD), proportional second difference (PSD), etc.
 The default and most widely used is the Denton PFD method.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 Y <- rjd3toolkit::aggregate(rjd3toolkit::Retail$RetailSalesTotal, 1)
@@ -84,7 +97,5 @@ denton(s = x, t = Y, mul = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
+\code{denton_raw()} for benchmarking of atypical frequency series
 }

@@ -58,6 +58,19 @@ of the preliminary series. It corresponds to the method of Cauley and Trager
 used as line-search algorithm for the reduced unconstrained minimization
 problem.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 data("qna_data")
@@ -80,9 +93,4 @@ WP/11/179}.
 Daalmans, J., Di Fonzo, T., Mushkudiani, N. and Bikker, R. (2018). Growth
 Rates Preservation (GRP) temporal benchmarking: Drawbacks and alternative
 solutions. \emph{Statistics Canada}.
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

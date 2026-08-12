@@ -2,7 +2,7 @@
 % Please edit documentation in R/tempdisagg.R
 \name{temporal_disaggregation_raw}
 \alias{temporal_disaggregation_raw}
-\title{Temporal Disaggregation of an Atypical Frequency Series by Regression Models.}
+\title{Temporal Disaggregation of an Atypical Frequency Series by Regression Models}
 \usage{
 temporal_disaggregation_raw(
   series,
@@ -103,6 +103,19 @@ Fernandez, Litterman and some variants of those algorithms. The
 \code{temporal_disaggregation_raw()} function extends \code{temporal_disaggregation()}
 by allowing temporal disaggregation for any frequency ratio.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Use of Chow-lin method to disaggregate a biennial series with an annual indicator
@@ -132,8 +145,4 @@ td3$estimation$disagg
 }
 \seealso{
 \code{temporal_interpolation_raw()}
-
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

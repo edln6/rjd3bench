@@ -43,9 +43,16 @@ NULL
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Retail data, monthly indicator

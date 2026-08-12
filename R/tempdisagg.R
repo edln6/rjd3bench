@@ -2,7 +2,7 @@
 #' @importFrom stats frequency is.ts setNames
 NULL
 
-#' @title Temporal Disaggregation of a Time Series by Regression Models.
+#' @title Temporal Disaggregation of a Time Series by Regression Models
 #'
 #' @description
 #' Perform temporal disaggregation of low-frequency to high-frequency time
@@ -68,10 +68,16 @@ NULL
 #'
 #' `temporal_interpolation_raw()` for interpolation of atypical frequency series
 #'
+#' @section Vignette:
 #'
-#' For more information, see the vignette:
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Chow-lin with a monthly indicator
@@ -213,7 +219,7 @@ temporal_disaggregation <- function(
 }
 
 
-#' @title Temporal Disaggregation of an Atypical Frequency Series by Regression Models.
+#' @title Temporal Disaggregation of an Atypical Frequency Series by Regression Models
 #'
 #' @description
 #' Perform temporal disaggregation of low-frequency to high-frequency time
@@ -280,9 +286,16 @@ temporal_disaggregation <- function(
 #'
 #' @seealso `temporal_interpolation_raw()`
 #'
-#' For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Use of Chow-lin method to disaggregate a biennial series with an annual indicator
@@ -437,7 +450,7 @@ temporal_disaggregation_raw <- function(
 }
 
 
-#' @title Interpolation of a Time Series by Regression Models.
+#' @title Interpolation of a Time Series by Regression Models
 #'
 #' @description
 #' Perform temporal interpolation of low-frequency to high-frequency time
@@ -507,10 +520,16 @@ temporal_disaggregation_raw <- function(
 #' `temporal_disaggregation_raw()` for temporal disaggregation of atypical
 #' frequency series
 #'
+#' @section Vignette:
 #'
-#' For more information, see the vignette:
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Chow-lin / Fernandez when the last value of the interpolated series is
@@ -656,7 +675,7 @@ temporal_interpolation <- function(
 }
 
 
-#' @title Interpolation of an Atypical Frequency Series by Regression Models.
+#' @title Interpolation of an Atypical Frequency Series by Regression Models
 #'
 #' @description
 #' Perform temporal interpolation of low-frequency to high-frequency time series
@@ -727,9 +746,16 @@ temporal_interpolation <- function(
 #'
 #' @seealso `temporal_disaggregation_raw()`
 #'
-#' For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Use of Chow-lin method to interpolate a biennial series with an annual
@@ -897,7 +923,7 @@ temporal_interpolation_raw <- function(
 }
 
 
-#' @title Temporal Disaggregation and Interpolation of a Time Series by means of a Reverse Regression Model.
+#' @title Temporal Disaggregation and Interpolation of a Time Series by means of a Reverse Regression Model
 #'
 #' @description
 #' Perform temporal disaggregation and interpolation of low-frequency to high
@@ -937,9 +963,16 @@ temporal_interpolation_raw <- function(
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Retail data, monthly indicator
@@ -1094,9 +1127,16 @@ temporaldisaggregationI <- function(
 #'
 #' @seealso `multivariatecholette()` for time series reconciliation.
 #'
-#' For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Low-frequency data

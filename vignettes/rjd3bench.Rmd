@@ -67,9 +67,11 @@ Furthermore, there are *raw* version available for the functions `temporal_disag
 Eurostat (2018) recommends the use of regression-based models for the purpose of temporal disaggregation. Among them, we retrieve the Chow-Lin method and its variants Fernandez and Litterman. 
 
 Let $Y_T$, $T=1,...,m$, and $x_t$, $t=1,...,n$, be, respectively the observed low frequency benchmark and the high-frequency indicators of an unknown high frequency variable $y_t$. Chow-Lin, Fernandez and Litterman can be all expressed with the same equation, but with different models for the error term:
+
 $$
 y_t = x_t\beta+u_t
 $$
+
 where
 
 $u_t = \rho u_{t-1} + \epsilon_t$, with $|\rho| < 1$ (Chow-Lin),
@@ -79,9 +81,11 @@ $u_t = u_{t-1} + \epsilon_t$ (Fernandez),
 $u_t = u_{t-1} + \rho(\Delta u_{t-1}) + \epsilon_t$, with $|\rho| < 1$ (Litterman)
 
 The temporal constraint is:
+
 $$
 Y = Cy,
 $$
+
 where $C = I_m \otimes c$, $c$ is a row vector of size $s$ which is the frequency ratio between the disaggregated or interpolated series and the low frequency benchmark. The distinction between temporal disaggregation and interpolation lies in the definition of this vector c:
 
 - Temporal disaggregation: $c = [1,1,...,1]$ for aggregation (e.g., flow variables) and $c = [1/s,1/s,...,1/s]$ for average conversion (e.g., indexes)
@@ -133,13 +137,16 @@ y <- ti_raw$estimation$interp
 ## Model-based Denton
 
 Denton method and variants are usually expressed in mathematical terms as a constrained minimization problem. For example, the widely used Denton proportional first difference (PFD) method is usually expressed as follows:
+
 $$
 min_{y_t}\sum^n_{t=2}\left[\frac{y_t}{x_t}-\frac{y_{t-1}}{x_{t-1}}\right]^2
 $$
+
 subject to the temporal aggregation constraint (flow variables)
 $$
 \sum_{t} y_t = Y_T
 $$
+
 where $y_t$ is the value of the estimate of the high frequency series at period t, $x_t$ is the value of the high frequency indicator at period t and $Y_T$ is the value of the low frequency series (i.e. the benchmark series) at period T.
 
 Equivalently, the Denton PFD method can also be expressed as a statistical model considering the following state space representation
@@ -147,7 +154,7 @@ Equivalently, the Denton PFD method can also be expressed as a statistical model
 $$
 \begin{align}
 y_t &= \beta_t x_t \\
-\beta_{t+1} &= \beta_t + \varepsilon_t \qquad \varepsilon_t \sim {\sf NID}(0, \sigma^2_{\varepsilon})
+\beta_{t+1} &= \beta_t + \varepsilon_t \qquad \varepsilon_t \sim \mathrm{NID}(0, \sigma^2_{\varepsilon})
 \end{align}
 $$
 
@@ -180,29 +187,38 @@ y_t = \phi y_{t-1} + m + gt + x_t'\beta_0 + x_{t-1}'\beta_1 + \varepsilon_t
 \qquad 
 (1)
 $$
+
 subject to the temporal constraint (flow variables)
+
 $$
 \sum_{t} y_t = Y_T
 $$
+
 where $y_t$ is the value of the estimate of the high frequency series at period t, $x_t$ is the value of the high frequency indicator at period t and $Y_T$ is the value of the low frequency series (i.e. the benchmark series) at period T.
 
 The ADL model nests the Chow-Lin model and its variants Fernandez and Litterman (for Litterman, the ADL model must be formulated in the first differences of the dependent and explanatory variables).
 
 Recall the Chow-Lin model
+
 $$
 \begin{align}
 y_t &= x_t\beta + u_t \\
 u_t &= \rho u_{t-1} + \varepsilon_t
 \end{align}
 $$
+
 Combine it into a single equation and substitute for $u_{t-1}$
+
 $$
 y_t = x_t\beta + \rho (y_{t-1} - x_{t-1}\beta) + \varepsilon_t
 $$
+
 So, the ADL model corresponds to the Chow-Lin model if
+
 $$
 \beta_1 = -\phi\beta_0 \qquad (2)
 $$
+
 and to the Fernandez model if we further assumes that $\phi = 1$.
 
 Recall that the Chow-Lin model relies on the strong assumption of that the disaggragated series $y_t$ and the indicator(s) $x_t$ are fully co-integrated (if not stationary). The main benefit of the ADL model over Chow-Lin is that it offers an extended modelling framework which accounts for the uncertainty about the existence of co-integration between $y_t$ and $x_t$. Hence, by nesting both the Chow-Lin and the Fernandez model, it prevents potential spurious regressions between $y_t$ and $x_t$.
@@ -255,10 +271,13 @@ x_t &= a + by_t + u_t \\
 u_t &= \rho u_{t-1} + \varepsilon_t
 \end{align}
 $$
+
 subject to the temporal constraint (flow variables)
+
 $$
 \sum_{t} y_t = Y_T
 $$
+
 The choice of which variable is dependent and which is independent is far from arbitrary. It changes the assumptions and the interpretation of the model, and the outcome may be very different too. In particular, if the fit between the benchmark and the indicator is globally poor, the smoothing part of the Chow-Lin model usually becomes more influential (if constant > 0), resulting in a disaggregated series that is smoother, meaning that the indicator's movements are dampened. Conversely, under the reverse model above, we can have a high estimate for parameter $a$ and a low estimate for $b$, which may result in a disaggregated series being more volatile, effectively amplifying the indicator's movements.
 
 The reverse regression method can be called with the `temporaldisaggregationI()` function. The output of the function `temporaldisaggregationI()` contains the disaggregated series as well as the estimates of the model coefficients. A print(), summary() and plot() functions can be applied on the output object.
@@ -292,9 +311,11 @@ As for the temporal disaggregation/interpolation method Chow-Lin and its variant
 Denton methods relies on the principle of movement preservation. There exist several variants corresponding to different definitions of movement preservation: additive first difference (AFD), proportional first difference (PFD), additive second difference (ASD), proportional second difference (PSD).
 
 The most widely used is the Denton PFD variant. Let $Y_T$, $T=1,...,m$, and $x_t$, $t=1,...,n$, be, respectively the temporal benchmarks and the high-frequency preliminary values of an unknown target variable $y_t$. The objective function of the Denton PFD method is as follows (considering the small modification suggested by Cholette to deal with the starting conditions of the problem):
+
 $$
 min_{y_t}\sum^n_{t=2}\left[\frac{y_t}{x_t}-\frac{y_{t-1}}{x_{t-1}}\right]^2
 $$
+
 This objective function is minimized subject to the temporal aggregation constraints $\sum_{t\epsilon T} y_t = Y_T$, $T=1,...,m$ (flows variables). In other words, the benchmarked series is estimated in such a way that the "Benchmark-to-Indicator" ratio $\frac{y_t}{x_t}$ remains as smooth as possible, which is often of key interest in benchmarking.
 
 In the literature (see for example Di Fonzo and Marini, 2011), Denton PFD is generally considered as a good approximation of the [GRP method](#grp), meaning that it preserves the period-to-period growth rates of the preliminary series. It is also argued that in many applications, Denton PFD is more appropriate than GRP method as it deals with a linear problem which is computationally easier, and does not suffer from the issues related to time irreversibility and singular objective function when $y_t$ approaches 0 (see Daalmans et al, 2018).
@@ -332,6 +353,7 @@ Let $Y_T$, $T=1,...,m$, and $x_t$, $t=1,...,n$, be, respectively the temporal be
 $$
 f(x) = \sum_{t=2}^{n}\left(\frac{y_t}{y_{t-1}} - \frac{x_t}{x_{t-1}}\right)^2
 $$
+
 and look for values $y_t^*$, $t=1,...,n$, which minimize it subject to the temporal aggregation constraints $\sum_{t\epsilon T} y_t = Y_T$, $T=1,...,m$ (flows variables). In other words, the benchmarked series is estimated in such a way that its temporal dynamics; as expressed by the growth rates $\frac{y_t^*}{y_{t-1}^*}$, $t=2,...,n$, be "as close as possible" to the temporal dynamics of the preliminary series, where the "distance" from the preliminary growth rates $\frac{x_t}{x_{t-1}}$ is given by the sum of the squared differences. (Di Fonzo, Marini, 2011)
 
 The objective function considered by Cauley and Trager is a natural measure of the movement of a time series and as one would expect, it is usually slightly better than the Denton PFD method at preserving the movement of the series (Di Fonzo, Marini, 2011). However, unlike the Denton PFD method which deals with a linear problem, GRP solves a more difficult nonlinear problem. Furthermore, the GRP method suffers from a couple of drawbacks, which are time irreversibility and potential singularities in the objective function when $y_{t-1}$ approaches to 0, which could lead to undesirable results (see Daalmans et al, 2018).
@@ -342,11 +364,13 @@ Backward GRP:
 $$
 f(x) = \sum_{t=2}^{n}\left(\frac{y_{t-1}}{y_t} - \frac{x_{t-1}}{x_t}\right)^2
 $$
+
 Symmetric GRP:
 $$
 f(x) = \frac{1}{2} \sum_{t=2}^{n}\left(\frac{y_t}{y_{t-1}} - \frac{x_t}{x_{t-1}}\right)^2 +
 \frac{1}{2} \sum_{t=2}^{n}\left(\frac{y_{t-1}}{y_t} - \frac{x_{t-1}}{x_t}\right)^2
 $$
+
 Logarithmic GRP:
 $$
 f(x) = \sum_{t=2}^{n}\left(log\left(\frac{y_t}{y_{t-1}}\right) - log\left(\frac{x_t}{x_{t-1}}\right) \right)^2
@@ -389,6 +413,7 @@ Let $Y_T$, $T=1,...,m$, and $x_t$, $t=1,...,n$, be, respectively the temporal be
 $$
 f(x) = (1-\rho^2) \left(\frac{x_1 - y_1}{|x_1|^\lambda}\right)^2 + \sum_{t=2}^{n}\left[\left(\frac{x_t - y_t}{|x_t|^\lambda}\right) - \rho \left(\frac{x_{t-1} - y_{t-1}}{|x_{t-1}|^\lambda}\right)\right]^2
 $$
+
 This objective function is minimized subject to the temporal aggregation constraints $\sum_{t\epsilon T} y_t = Y_T$, $T=1,...,m$ (flows variables). The method is driven by a couple of parameters:
 
 - The smoothing parameter $\rho$, $0 \leq \rho \leq 1$. $\rho$ determines the degree of movement preservation. When $\lambda = 1$, the closer $\rho$ is to 1, the smoother will be the ratios between the benchmarked and the preliminary series, resulting in a better preservation of the latter’s period‑to‑period growth rates.
@@ -403,6 +428,7 @@ b_a &= \frac{\sum_{T=1}^{m}{Y_T} - \sum_{T=1}^{m}{\sum_{t\epsilon T}x_t}}{m} \\
 b_m &= \frac{\sum_{T=1}^{m}{Y_T}}{\sum_{T=1}^{m}{\sum_{t\epsilon T}x_t}}
 \end{aligned}
 $$
+
 If a bias correction factor is considered, the preliminary series is re-scaled in the objective function above: $x_t^*$ replaces $x_t$, where $x_t^*=b_a+x_t$ in the additive case and $x_t^*=b_m \times x_t$ in the multiplicative case. The rationale for considering a bias correction factor with this method is provided in Dagum and Cholette (2006, Ch. 6). It mainly impacts the observations at the end of the series that are not covered by a benchmark. In particular, when $\rho < 1$, the Benchmark-to-Indicator ratios (BI ratios) at the end of the series converge to the bias correction factor. By default, no bias is considered, meaning that we do not expected a systematic bias between the benchmarks and the preliminary series ($b_a = 0$ or $b_m = 1$).
 
 Cholette method has been widely used to benchmark seasonally adjusted series to annual totals derived from the raw series. For this purpose, Quenneville et al (2006) argues that an undesirable feature of the Denton PFD method is that it repeats the last BI ratio for the observations at the end of the series that are not covered by a benchmark. For observations without a benchmark, the best estimate of the BI-ratio is the estimated value of the bias; so, repeating the last value is not appropriate. Instead, to obtain a smooth transition from this last BI-ratio to the bias, one can set $\rho < 1$. For observations with a benchmark, the BI-ratios are closer to those obtained with the Denton PFD method ($\lambda = 1$) and smoother when $\rho \to 1$. As a pragmatic benchmarking method routinely applicable to large numbers of seasonal time series, Dagum and Cholette (2006) recommend the proportional benchmarking method ($\lambda = 1$) with a value of $\rho = 0.90$ for monthly series and $\rho = 0.90^3= 0.729$ for quarterly series. An alternative would be to estimate the autocorrelation structure of the error instead of using those default values.
@@ -438,12 +464,14 @@ Let
 * $x_{i,t}$ be the high-frequency preliminary values of the set of the unknown target variables $y_{i,t}$.
 
 The objective function of the multivariate Cholette method is:
+
 $$
 f(x) = (1-\rho^2) \sum_{i=1}^{I}\left(\frac{x_{i,1} - y_{i,1}}{|x_{i,1}|^\lambda}\right)^2 + \sum_{i=1}^{I}\sum_{t=2}^{n}\left[\left(\frac{x_{i,t} - y_{i,t}}{|x_{i,t}|^\lambda}\right) - \rho \left(\frac{x_{i,t-1} - y_{i,t-1}}{|x_{i,t-1}|^\lambda}\right)\right]^2
 $$
+
 This objective function is minimized subject to
 
-* the temporal aggregation constraints $\sum_{t\epsilon T} y_{i,t} = Y_{i,T}$, and
+* the temporal aggregation constraints $\sum_{t\epsilon T} y_{i,t} = Y_{i,T}$,
 * the contemporaneous constraints given by $\sum_{j\epsilon J_k}\omega_{k,j}x_{j,t} = z_{k,t}$.
 
 Note that consistency between the temporal aggregation constraints and the contemporaneous constraints is required (see the consistency check in the example).
@@ -508,11 +536,11 @@ The multivariate Chow-Lin and Fernandez models are defined as:
 
 $$
 \begin{align}
-y_{t,i} &= \sum_{j=1}^{P_i}{x_{t,j} \beta_{j,i}}+u_{t,i} \\
-u_{t,i} &= \rho_i u_{t-1,i} + \eta_{t,i}, 
-\qquad \eta_{t,i} \sim {\sf NID}(0, \Sigma)  \qquad
+y_{t,i} &= \sum_{j=1}^{P_i}{x_{t,j} \beta_{j,i}} + u_{t,i} \\
+u_{t,i} &= \rho_i u_{t-1,i} + \eta_{t,i}, \qquad \eta_{t,i} \sim \mathrm{NID}(0,\Sigma)
 \end{align}
 $$
+
 where:
 
 - $\rho_i = 1$ (Fernandez), or $|\rho_i| < 1$ (Chow-Lin),
@@ -556,6 +584,7 @@ and
 $$
 \hat{\lambda} = \min\left\{ 1,\, \frac{\sum_{i \ne j} \widehat{\operatorname{Var}}(r_{ij})} {\sum_{i \ne j} r_{ij}^{2}} \right\}
 $$
+
 Note other variants of the shrinkage estimator can also be considered. For instance, shrinkage may applied not only to the covariance terms but also to the variances. This can be achieved using packages such as **'corpcor'**, with the resulting variance-covariance matrix supplied by the user through the `var.matrix` argument.
 
 The multivariate Chow-Lin and Fernandez methods can be called with the `multivariatechowlin()` function. The output of the `multivariatechowlin()` function contains the disaggregated series and the most important information about the multivariate regression including the estimates of model coefficients and the decomposition of the disaggregated series. A print() and summary() function can also be applied on the output object.
@@ -667,13 +696,17 @@ The calendarization process involves two steps:
 - Aggregation of the resulting daily values into the desired calendar reference periods.
 
 Based on the paper from Quenneville et al (2012), the temporal disaggregation step is performed by considering a state-space representation of the Denton proportional first difference (PFD) method. Recall the objective function of the (modified) Denton PFD method
+
 $$
 min_{y_t}\sum^n_{t=2}\left[\frac{y_t}{x_t}-\frac{y_{t-1}}{x_{t-1}}\right]^2
 $$
+
 which is minimized under the temporal aggregation constraints
+
 $$
 \sum_{t\epsilon l} y_t = Y_l
 $$
+
 $Y_l$, $l=1,...,q$, are the observed values to be distributed and $x_t$, $t=1,...,n$ are the daily indicator values that represent the daily movement of the unknown target variable $y_t$. In the absence of such information, a constant indicator (say, a vector of 1) is used instead.
 
 The calendarization process can be called with the `calendarization()` function. By default, a constant indicator is considered which means that the daily level of activity is assumed to be constant. To include an indicator into the disaggregation process, the function parameter `dailyweights` has to be filled. If provided, the daily indicator values (or weights) should reflect the daily level of activity that may be varying in function for instance of seasonality, trading day or other calendar effects such as public holidays.
