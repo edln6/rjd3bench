@@ -70,6 +70,19 @@ additive second difference (ASD), proportional second difference (PSD), etc.
 The default and most widely used is the Denton PFD method. The \code{denton_raw()}
 function extends \code{denton()} by allowing benchmarking for any frequency ratio.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 Y <- c(500,510,525,520)
@@ -99,9 +112,4 @@ denton_raw(x2, Y, freqratio = 5, conversion = "Last")
 denton_raw(x2, Y, freqratio = 5, conversion = "Last", startoffset = 1)
 
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

@@ -52,6 +52,19 @@ disaggregation of the observed data into daily values. After that, the
 resulting daily values are aggregated into the desired calendar reference
 periods.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 
@@ -97,9 +110,4 @@ yq_2 <- cal_2$rslt
 Quenneville, B., Picard F., Fortier S. (2012). Calendarization
 with interpolating splines and state space models. Statistics Canada, Appl.
 Statistics (2013) 62, part 3, pp 371-399.
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

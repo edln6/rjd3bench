@@ -2,7 +2,7 @@
 % Please edit documentation in R/tempdisagg.R
 \name{temporal_interpolation}
 \alias{temporal_interpolation}
-\title{Interpolation of a Time Series by Regression Models.}
+\title{Interpolation of a Time Series by Regression Models}
 \usage{
 temporal_interpolation(
   series,
@@ -99,6 +99,19 @@ Perform temporal interpolation of low-frequency to high-frequency time
 series by regression models. The implemented models include Chow-Lin,
 Fernandez, Litterman and some variants of those algorithms.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Chow-lin / Fernandez when the last value of the interpolated series is
@@ -126,8 +139,4 @@ ti4$estimation$interp
 
 \code{temporal_disaggregation_raw()} for temporal disaggregation of atypical
 frequency series
-
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

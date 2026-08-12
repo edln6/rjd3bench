@@ -2,7 +2,7 @@
 % Please edit documentation in R/tempdisagg.R
 \name{temporal_disaggregation}
 \alias{temporal_disaggregation}
-\title{Temporal Disaggregation of a Time Series by Regression Models.}
+\title{Temporal Disaggregation of a Time Series by Regression Models}
 \usage{
 temporal_disaggregation(
   series,
@@ -95,6 +95,19 @@ Perform temporal disaggregation of low-frequency to high-frequency time
 series by regression models. The implemented models include Chow-Lin,
 Fernandez, Litterman and some variants of those algorithms.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Chow-lin with a monthly indicator
@@ -127,8 +140,4 @@ td3$estimation$disagg
 frequency series,
 
 \code{temporal_interpolation_raw()} for interpolation of atypical frequency series
-
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

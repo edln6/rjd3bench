@@ -41,9 +41,18 @@ NULL
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @seealso `denton_raw()` for benchmarking of atypical frequency series
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' @section Vignette:
+#'
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' Y <- rjd3toolkit::aggregate(rjd3toolkit::Retail$RetailSalesTotal, 1)
@@ -142,9 +151,16 @@ denton <- function(
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' Y <- c(500,510,525,520)
@@ -283,9 +299,16 @@ denton_raw <- function(
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' data("qna_data")
@@ -355,9 +378,16 @@ grp <- function(
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' data("qna_data")
@@ -448,9 +478,16 @@ cubicspline <- function(
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' ym_true <- rjd3toolkit::Retail$RetailSalesTotal
@@ -563,9 +600,16 @@ cholette <- function(
 #'
 #' @export
 #'
-#' @seealso For more information, see the vignette:
+#' @section Vignette:
 #'
-#' `utils::browseVignettes()`, e.g. `browseVignettes(package = "rjd3bench")`
+#' For more information on the method, its arguments, and the other methods
+#' available in the package, see the package vignette:
+#'
+#' * In R:
+#'   `browseVignettes(package = "rjd3bench")`
+#'
+#' * Online:
+#'   <https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html>
 #'
 #' @examplesIf rjd3jars::check_java_version(silent = TRUE)
 #' # Example 1: one "standard" contemporaneous constraint: z=x1+x2+x3

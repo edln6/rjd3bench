@@ -62,6 +62,19 @@ method. In addition, the approach allows the disaggregated series to be
 constrained (or 'frozen') at specific periods or prior to a given date by
 fixing the corresponding high‑frequency BI ratios.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Retail data, monthly indicator
@@ -92,9 +105,4 @@ stats::ts.plot(y2, y1, main = "Disaggregated series",
 graphics::legend("topleft", lty = 1, col = c("black", "red"),
                  legend = c("td1", "td2"))
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

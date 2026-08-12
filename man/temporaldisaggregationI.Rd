@@ -2,7 +2,7 @@
 % Please edit documentation in R/tempdisagg.R
 \name{temporaldisaggregationI}
 \alias{temporaldisaggregationI}
-\title{Temporal Disaggregation and Interpolation of a Time Series by means of a Reverse Regression Model.}
+\title{Temporal Disaggregation and Interpolation of a Time Series by means of a Reverse Regression Model}
 \usage{
 temporaldisaggregationI(
   series,
@@ -57,6 +57,19 @@ usual regression-based models, this approach treats a high-frequency
 indicator as the dependent variable and the unknown target series as the
 independent variable.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Retail data, monthly indicator
@@ -77,9 +90,4 @@ td$regression$b
 \references{
 Bournay J., Laroque G. (1979). Reflexions sur la methode
 d'elaboration des comptes trimestriels. Annales de l'Insee, n. 36, pp.3-30.
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

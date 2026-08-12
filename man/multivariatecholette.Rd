@@ -71,6 +71,19 @@ independently (the so-called direct approach). The multivariate Cholette
 method relies on the principle of movement preservation and encompasses other
 reconciliation methods such as the multivariate Denton method.
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Example 1: one "standard" contemporaneous constraint: z=x1+x2+x3
@@ -137,9 +150,4 @@ cc <- c("z1=x1+3*x2+0.5*x3+x4+x5", "0=x1+x2-x4")
 
 multivariatecholette(xlist = data.list, tcvector = tc, ccvector = cc)
 \dontshow{\}) # examplesIf}
-}
-\seealso{
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }

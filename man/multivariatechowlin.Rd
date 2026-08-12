@@ -117,6 +117,19 @@ Performs simultaneous temporal disaggregation of a system of low frequency
 time series into higher frequency series, based on the multivariate
 extension of the Chow-Lin model or the Random Walk approach (Fernandez).
 }
+\section{Vignette}{
+
+
+For more information on the method, its arguments, and the other methods
+available in the package, see the package vignette:
+\itemize{
+\item In R:
+\code{browseVignettes(package = "rjd3bench")}
+\item Online:
+\url{https://rjdverse.github.io/rjd3bench/articles/rjd3bench.html}
+}
+}
+
 \examples{
 \dontshow{if (rjd3jars::check_java_version(silent = TRUE)) withAutoprint(\{ # examplesIf}
 # Low-frequency data
@@ -213,8 +226,4 @@ do.call(cbind, mtd3$estimation$disagg)
 }
 \seealso{
 \code{multivariatecholette()} for time series reconciliation.
-
-For more information, see the vignette:
-
-\code{utils::browseVignettes()}, e.g. \code{browseVignettes(package = "rjd3bench")}
 }
