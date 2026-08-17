@@ -55,7 +55,7 @@ NULL
 #' @return An object of class "JD3_TEMPDISAGG_RSLTS" is returned. The following
 #' are returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation,
+#' * `estimation` `[[2]]` disaggregated time series and standard errors,
 #'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
@@ -278,7 +278,7 @@ temporal_disaggregation <- function(
 #' @return An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The
 #' following are returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` disaggregated values and standard deviation,
+#' * `estimation` `[[2]]` disaggregated values and standard errors,
 #'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
@@ -507,7 +507,7 @@ temporal_disaggregation_raw <- function(
 #' @return An object of class "JD3_INTERP_RSLTS" is returned. The following are
 #' returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` interpolated Time-Series and standard deviation,
+#' * `estimation` `[[2]]` interpolated time series and standard errors,
 #'   regression effects and smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
@@ -738,7 +738,7 @@ temporal_interpolation <- function(
 #' @return An object of class "JD3_INTERPRAW_RSLTS" is returned. The following
 #' are returned as a list:
 #' * `regression` `[[1]]` regression coefficients;
-#' * `estimation` `[[2]]` interpolated values and standard deviation,
+#' * `estimation` `[[2]]` interpolated values and standard errors,
 #'   regression effects, smoothing part, parameter and residuals;
 #' * `likelihood` `[[3]]` likelihood statistics.
 #'
@@ -1108,20 +1108,25 @@ temporaldisaggregationI <- function(
 #'   the residuals of the univariate models. The default is `FALSE`, meaning
 #'   that only a diagonal matrix is estimated.
 #'   This argument is used only when `var = "fromUnivariate"`.
-#' @param var.shrinkCov Boolean. Indicates whether a shrinkage covariance
-#'   estimator should be used. See the vignette for more details.
+#' @param var.shrinkCov Boolean. Indicates whether a shrinkage estimator
+#'   should be used for covariance. See the package vignette for more details.
 #'   This argument is used only when `var = "fromUnivariate"` and
 #'   `var.includeCov = TRUE`.
 #' @param var.matrix The variance-covariance matrix of the innovations.
 #'   This argument is used only when `var = "userDefined"` and must be provided
 #'   in that case.
+#' @param rescale.variance Boolean. Indicates whether the variance of the
+#'   estimates should be rescaled based on the model residuals. The default is
+#'   `FALSE`. This option has no impact on the disaggregated series, but affects
+#'   the standard errors of both the disaggregated series and the estimated
+#'   coefficients. See the package vignette for more details.
 #'
 #' @return An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The
 #' following are returned as a list:
 #' * `regression` `[[1]]` regression coefficients for each series;
-#' * `estimation` `[[2]]` disaggregated Time-Series and standard deviation for
-#'   each series, regression effects, smoothing part, parameter and
-#'   variance-covariance matrix;
+#' * `estimation` `[[2]]` disaggregated time series and standard errors,
+#'   regression effects, smoothing parts, parameters and variance-covariance
+#'   matrix of the innovations;
 #'
 #' @export
 #'
@@ -1183,11 +1188,11 @@ temporaldisaggregationI <- function(
 #'                             rhos = c(0.85, 1.0, 0.9),
 #'                             var = "fromUnivariate",
 #'                             var.includeCov = FALSE,
-#'                             var.shrinkCov = FALSE,
-#'                             var.matrix = NULL)
+#'                             var.shrinkCov = FALSE)
 #'
-#' mtd1$estimation$vcov # variance-covariance matrix of the innovations
+#' mtd1$estimation$var$vcov # variance-covariance matrix of the innovations
 #' do.call(cbind, mtd1$estimation$disagg) # disaggregated series
+#' do.call(cbind, mtd1$estimation$edisagg) # standard errors of the disaggregated series
 #'
 #' ### with var-cov matrix estimated from the univariate models, using a shrinkage estimator for the covariance
 #' mtd2 <- multivariatechowlin(series = lf_series,
@@ -1200,11 +1205,11 @@ temporaldisaggregationI <- function(
 #'                             rhos = c(0.85, 1.0, 0.9),
 #'                             var = "fromUnivariate",
 #'                             var.includeCov = TRUE,
-#'                             var.shrinkCov = TRUE,
-#'                             var.matrix = NULL)
+#'                             var.shrinkCov = TRUE)
 #'
-#' mtd2$estimation$vcov
+#' mtd2$estimation$var$vcov
 #' do.call(cbind, mtd2$estimation$disagg)
+#' do.call(cbind, mtd2$estimation$edisagg)
 #'
 #' ## Multivariate random walk model (multivariate Fernandez)
 #'
@@ -1224,11 +1229,13 @@ temporaldisaggregationI <- function(
 #'                                 0.001, 0.002, 0.003),
 #'                                 nrow = 3,
 #'                                 byrow = TRUE
-#'                             )
+#'                             ),
+#'                             rescale.variance = TRUE
 #' )
 #'
-#' mtd3$estimation$vcov
+#' mtd3$estimation$var$vcov
 #' do.call(cbind, mtd3$estimation$disagg)
+#' do.call(cbind, mtd3$estimation$edisagg)
 #'
 multivariatechowlin <- function(
     series,
@@ -1242,7 +1249,8 @@ multivariatechowlin <- function(
     var = c("fromUnivariate", "allEquals", "userDefined"),
     var.includeCov = FALSE,
     var.shrinkCov = FALSE,
-    var.matrix = NULL
+    var.matrix = NULL,
+    rescale.variance = FALSE
 ) {
     var <- match.arg(var)
 
@@ -1368,7 +1376,8 @@ multivariatechowlin <- function(
         var,
         var.includeCov,
         var.shrinkCov,
-        jvar_mat
+        jvar_mat,
+        rescale.variance
     )
 
     .jd2r_lhmap <- function(
@@ -1478,14 +1487,18 @@ multivariatechowlin <- function(
         rjd3toolkit::.jd3_object(subclasses = "MTD", result = TRUE) |>
         rjd3toolkit::result("smoothingpart")
 
+    var <- list(vcov = rjd3toolkit::.proc_matrix(jrslt, "innovationsvarcov"),
+                cor = rjd3toolkit::.proc_matrix(jrslt, "innovationscor"),
+                lambda = rjd3toolkit::.proc_numeric(jrslt, "shrinkagecoef"))
+
     estimation <- list(
         disagg = disagg,
-        # edisagg = edisagg,
+        edisagg = edisagg,
         regeffect = regeffect,
         smoothingpart = smoothingpart,
         parameters = rhos,
         # residuals -> TODO
-        vcov = rjd3toolkit::.proc_matrix(jrslt, "innovationsvarcov")
+        var = var
     )
 
     output <- list(

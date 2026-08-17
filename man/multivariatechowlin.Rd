@@ -16,7 +16,8 @@ multivariatechowlin(
   var = c("fromUnivariate", "allEquals", "userDefined"),
   var.includeCov = FALSE,
   var.shrinkCov = FALSE,
-  var.matrix = NULL
+  var.matrix = NULL,
+  rescale.variance = FALSE
 )
 }
 \arguments{
@@ -93,23 +94,29 @@ the residuals of the univariate models. The default is \code{FALSE}, meaning
 that only a diagonal matrix is estimated.
 This argument is used only when \code{var = "fromUnivariate"}.}
 
-\item{var.shrinkCov}{Boolean. Indicates whether a shrinkage covariance
-estimator should be used. See the vignette for more details.
+\item{var.shrinkCov}{Boolean. Indicates whether a shrinkage estimator
+should be used for covariance. See the package vignette for more details.
 This argument is used only when \code{var = "fromUnivariate"} and
 \code{var.includeCov = TRUE}.}
 
 \item{var.matrix}{The variance-covariance matrix of the innovations.
 This argument is used only when \code{var = "userDefined"} and must be provided
 in that case.}
+
+\item{rescale.variance}{Boolean. Indicates whether the variance of the
+estimates should be rescaled based on the model residuals. The default is
+\code{FALSE}. This option has no impact on the disaggregated series, but affects
+the standard errors of both the disaggregated series and the estimated
+coefficients. See the package vignette for more details.}
 }
 \value{
 An object of class "JD3_MULTITEMPDISAGG_RSLTS" is returned. The
 following are returned as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients for each series;
-\item \code{estimation} \verb{[[2]]} disaggregated Time-Series and standard deviation for
-each series, regression effects, smoothing part, parameter and
-variance-covariance matrix;
+\item \code{estimation} \verb{[[2]]} disaggregated time series and standard errors,
+regression effects, smoothing parts, parameters and variance-covariance
+matrix of the innovations;
 }
 }
 \description{
@@ -176,11 +183,11 @@ mtd1 <- multivariatechowlin(series = lf_series,
                             rhos = c(0.85, 1.0, 0.9),
                             var = "fromUnivariate",
                             var.includeCov = FALSE,
-                            var.shrinkCov = FALSE,
-                            var.matrix = NULL)
+                            var.shrinkCov = FALSE)
 
-mtd1$estimation$vcov # variance-covariance matrix of the innovations
+mtd1$estimation$var$vcov # variance-covariance matrix of the innovations
 do.call(cbind, mtd1$estimation$disagg) # disaggregated series
+do.call(cbind, mtd1$estimation$edisagg) # standard errors of the disaggregated series
 
 ### with var-cov matrix estimated from the univariate models, using a shrinkage estimator for the covariance
 mtd2 <- multivariatechowlin(series = lf_series,
@@ -193,11 +200,11 @@ mtd2 <- multivariatechowlin(series = lf_series,
                             rhos = c(0.85, 1.0, 0.9),
                             var = "fromUnivariate",
                             var.includeCov = TRUE,
-                            var.shrinkCov = TRUE,
-                            var.matrix = NULL)
+                            var.shrinkCov = TRUE)
 
-mtd2$estimation$vcov
+mtd2$estimation$var$vcov
 do.call(cbind, mtd2$estimation$disagg)
+do.call(cbind, mtd2$estimation$edisagg)
 
 ## Multivariate random walk model (multivariate Fernandez)
 
@@ -217,11 +224,13 @@ mtd3 <- multivariatechowlin(series = lf_series,
                                 0.001, 0.002, 0.003),
                                 nrow = 3,
                                 byrow = TRUE
-                            )
+                            ),
+                            rescale.variance = TRUE
 )
 
-mtd3$estimation$vcov
+mtd3$estimation$var$vcov
 do.call(cbind, mtd3$estimation$disagg)
+do.call(cbind, mtd3$estimation$edisagg)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

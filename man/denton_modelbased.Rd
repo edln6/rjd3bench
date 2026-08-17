@@ -48,7 +48,7 @@ and the numeric value specifies the fixed BI ratio.}
 An object of class "JD3_MBDENTON_RSLTS" is returned. The following
 are returned as a list:
 \itemize{
-\item \code{estimation} \verb{[[1]]} disaggregated Time-Series, BI ratios and standard deviations;
+\item \code{estimation} \verb{[[1]]} disaggregated time series, BI ratios and standard errors;
 \item \code{likelihood} \verb{[[2]]} likelihood statistics.
 }
 }

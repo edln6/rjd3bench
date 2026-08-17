@@ -89,7 +89,7 @@ An object of class "JD3_INTERP_RSLTS" is returned. The following are
 returned as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients;
-\item \code{estimation} \verb{[[2]]} interpolated Time-Series and standard deviation,
+\item \code{estimation} \verb{[[2]]} interpolated time series and standard errors,
 regression effects and smoothing part, parameter and residuals;
 \item \code{likelihood} \verb{[[3]]} likelihood statistics.
 }

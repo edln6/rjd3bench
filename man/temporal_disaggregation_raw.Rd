@@ -91,7 +91,7 @@ An object of class "JD3_TEMPDISAGGRAW_RSLTS" is returned. The
 following are returned as a list:
 \itemize{
 \item \code{regression} \verb{[[1]]} regression coefficients;
-\item \code{estimation} \verb{[[2]]} disaggregated values and standard deviation,
+\item \code{estimation} \verb{[[2]]} disaggregated values and standard errors,
 regression effects, smoothing part, parameter and residuals;
 \item \code{likelihood} \verb{[[3]]} likelihood statistics.
 }
