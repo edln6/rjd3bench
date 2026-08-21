@@ -104,6 +104,16 @@ print.JD3_ADLDISAGG_RSLTS <- function(x, ...) {
 }
 
 #' @export
+print.JD3_MULTITEMPDISAGG_RSLTS <- function(x, ...) {
+    print(display_mtd_model(x$regression$model), row.names = FALSE)
+
+    cat("\n")
+    cat("Use summary() for more details.")
+
+    return(invisible(x))
+}
+
+#' @export
 summary.JD3_TEMPDISAGG_RSLTS <- function(object, ...) {
     summary_disagg(object)
 }
@@ -180,6 +190,30 @@ summary.JD3_TEMPDISAGGI_RSLTS <- function(object, ...) {
         print(model)
     }
 }
+
+#' @export
+summary.JD3_MULTITEMPDISAGG_RSLTS <- function(object, ...) {
+    snames <- names(object$regression$model)
+
+    cat("\n")
+    cat("Regression", "\n")
+    print(display_mtd_model(object$regression$model))
+
+    cat("\n")
+    cat("Errors", "\n")
+    print(matrix(
+        data = round(object$estimation$parameters, 2),
+        nrow = 1,
+        dimnames = list("rho", snames)
+    ))
+
+    cat("\n")
+    cat("Variance-covariance matrix of the innovations", "\n")
+    vcov <- object$estimation$var$vcov
+    rownames(vcov) <- colnames(vcov) <- snames
+    print(vcov)
+}
+
 
 #' @export
 #' @importFrom stats ts ts.plot start end

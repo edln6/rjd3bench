@@ -228,3 +228,29 @@ summary_disagg <- function(object) {
         print(object$regression$model)
     }
 }
+
+display_mtd_model <- function(model_list) {
+    do.call(rbind, lapply(names(model_list), function(sname) {
+        m <- model_list[[sname]]
+
+        if (!is.null(m)) {
+            data.frame(
+                series = sname,
+                regressor = rownames(m),
+                coef = m[, "coef"],
+                se = m[, "se"],
+                t = m[, "t"],
+                row.names = NULL
+            )
+        } else {
+            data.frame(
+                series = sname,
+                regressor = "None",
+                coef = NA,
+                se = NA,
+                t = NA,
+                row.names = NULL
+            )
+        }
+    }))
+}
