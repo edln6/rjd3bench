@@ -240,7 +240,8 @@ display_mtd_model <- function(model_list) {
                 coef = m[, "coef"],
                 se = m[, "se"],
                 t = m[, "t"],
-                row.names = NULL
+                row.names = NULL,
+                stringsAsFactors = FALSE
             )
         } else {
             data.frame(
@@ -249,7 +250,8 @@ display_mtd_model <- function(model_list) {
                 coef = NA,
                 se = NA,
                 t = NA,
-                row.names = NULL
+                row.names = NULL,
+                stringsAsFactors = FALSE
             )
         }
     }))
